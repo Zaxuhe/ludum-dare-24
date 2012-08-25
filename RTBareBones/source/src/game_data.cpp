@@ -102,13 +102,13 @@ void game_data::generate_map()
 	ants.push_back(a3);
 
 	//we also add the food
-	g_data.tiles_map[x_pos+1][y_pos-1][ITEM_FOOD_1] = 1;
-	g_data.tiles_map[x_pos-1][y_pos-1][ITEM_FOOD_1] = 1;
-	g_data.tiles_map[x_pos][y_pos-1][ITEM_FOOD_1] = 1;
+	g_data.tiles_map[x_pos+1][y_pos-1][ITEM_FOOD_5] = 1;
+	g_data.tiles_map[x_pos-1][y_pos-1][ITEM_FOOD_5] = 1;
+	g_data.tiles_map[x_pos][y_pos-1][ITEM_FOOD_5] = 1;
 	//the water
-	g_data.tiles_map[x_pos+1][y_pos+1][ITEM_WATER_1] = 1;
-	g_data.tiles_map[x_pos-1][y_pos+1][ITEM_WATER_1] = 1;
-	g_data.tiles_map[x_pos][y_pos+1][ITEM_WATER_1] = 1;
+	g_data.tiles_map[x_pos+1][y_pos+1][ITEM_WATER_5] = 1;
+	g_data.tiles_map[x_pos-1][y_pos+1][ITEM_WATER_5] = 1;
+	g_data.tiles_map[x_pos][y_pos+1][ITEM_WATER_5] = 1;
 
 }
 
@@ -156,11 +156,19 @@ void game_data::render_map()
 			 {
 				m_breed.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
 			 }
- 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_1) == true) //Breed
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_1) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_2) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_3) == true || 
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_4) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_5) == true) //Breed
 			 {
 				m_food_1.Blit( (x_pos*24),(y_pos*24));
 			 }
-  			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_1) == true) //Breed
+  			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_1) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_2) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_3) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_4) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_5) == true) //Breed
 			 {
 				m_water_1.Blit( (x_pos*24),(y_pos*24));
 			 }
@@ -207,6 +215,15 @@ void game_data::render_map()
 
 }
 
+void ant::cancel_job()
+{
+	if (current_job == DIG || current_job == BREED || current_job == PICK_EGG)
+	{
+		g_data.tiles_map[next_job_x][next_job_y][WORKING_ON_ME] = 0;
+	}
+	current_job = 0;
+	
+}
 
 //one step on the game
 void game_data::step()
@@ -237,6 +254,95 @@ void game_data::step()
 					ants[i].sleeping = false;
 				}
 				continue;
+			}
+			//WEE NEED TO FEEd
+			if (ants[i].hunger < 100 && ants[i].current_job != SEARCH_FOOD && ants[i].current_job != SEARCH_DRINK)
+			{
+				//I HAVE TO FIND SOMETHING TO EATTT
+				std::string best_mov;
+				for (int u = 0; u < 10000; u++)
+				{
+					best_mov += "a";
+				}
+				std::string mov;
+				for (int x_pos = 0; x_pos < 48; x_pos++)
+				{
+					for (int y_pos = 0; y_pos < 36; y_pos++)
+					{
+						if (g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_5] == 1
+							)//we have found foood!
+						{
+							//LogMsg("Econtre comidaaa :)");
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								best_mov = mov;
+								ants[i].cancel_job();
+								ants[i].current_job = SEARCH_FOOD;
+								//work_pos_x = ants[0].x;
+								//work_pos_y = ants[0].y;
+								ants[i].next_job_x = ants[0].x;
+								ants[i].next_job_y = ants[0].y;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+					}
+				}
+
+				if (best_mov.length() > 0 && best_mov[0] != 'a')
+				{
+					ants[i].path.movement_ = best_mov;
+				}
+			}
+			//WEE NEED TO DRINK
+			if (ants[i].thirst < 100 && ants[i].current_job != SEARCH_DRINK && ants[i].current_job != SEARCH_FOOD)
+			{
+				//I HAVE TO FIND SOMETHING TO EATTT
+				std::string best_mov;
+				for (int u = 0; u < 10000; u++)
+				{
+					best_mov += "a";
+				}
+				std::string mov;
+				for (int x_pos = 0; x_pos < 48; x_pos++)
+				{
+					for (int y_pos = 0; y_pos < 36; y_pos++)
+					{
+						if (g_data.tiles_map[x_pos][y_pos][ITEM_WATER_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_5] == 1
+							)//we have found foood!
+						{
+							//we need to cancel the current job
+							//LogMsg("Econtre comidaaa :)");
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								best_mov = mov;
+								ants[i].cancel_job();
+								ants[i].current_job = SEARCH_DRINK;
+								//work_pos_x = ants[0].x;
+								//work_pos_y = ants[0].y;
+								ants[i].next_job_x = ants[0].x;
+								ants[i].next_job_y = ants[0].y;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+					}
+				}
+
+				if (best_mov.length() > 0 && best_mov[0] != 'a')
+				{
+					ants[i].path.movement_ = best_mov;
+				}
 			}
 
 			if (ants[i].path.movement_.length() == 0 || ants[i].path.current_postion_>=ants[i].path.movement_.length())
@@ -289,6 +395,98 @@ void game_data::step()
 						baby.y = ants[i].next_job_y;
 						ants.push_back(baby);
 						ants[i].holding_item = 0;
+						ants[i].current_job = 0;
+						ants[i].next_job_x = 0;
+						ants[i].next_job_y = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == SEARCH_FOOD) //TODO: optimize this if time
+				{
+					if (ants[i].job_time == 0)
+					{
+						if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5]
+							)
+						{
+							if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1] = 0;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] = 1;
+							}
+							ants[i].hunger = 600; //max
+						}
+						ants[i].current_job = 0;
+						ants[i].next_job_x = 0;
+						ants[i].next_job_y = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == SEARCH_DRINK)
+				{
+					if (ants[i].job_time == 0)
+					{
+						if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] ||
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5]
+							)
+						{
+							if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1] = 0;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3] = 1;
+							}
+							else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5])
+							{
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5] = 0;
+								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] = 1;
+							}
+							ants[i].thirst =500; //max
+						}
 						ants[i].current_job = 0;
 						ants[i].next_job_x = 0;
 						ants[i].next_job_y = 0;

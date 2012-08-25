@@ -40,11 +40,21 @@ WORKING_ON_ME = 9, //if something is woring on it (example dig)
 //items
 HAS_ITEM = 10,
 ITEM_FOOD_1 = 11,
-ITEM_WATER_1 = 12,
+ITEM_FOOD_2 = 12,
+ITEM_FOOD_3 = 13,
+ITEM_FOOD_4 = 14,
+ITEM_FOOD_5 = 15,
+ITEM_WATER_1 = 16,
+ITEM_WATER_2 = 17,
+ITEM_WATER_3 = 18,
+ITEM_WATER_4 = 19,
+ITEM_WATER_5 = 20,
 
 //jobs
 PICK_EGG = 100,
-BE_A_BABY = 101 //its a job because you have to be a baby in order to grow :)
+BE_A_BABY = 101, //its a job because you have to be a baby in order to grow :)
+SEARCH_FOOD = 102,
+SEARCH_DRINK = 103
 };
 class ant
 {
@@ -55,9 +65,12 @@ class ant
         is_queen = false;
         hp = 100;
         sleepness = 200;
-        hunger = 200;
-        thirst = 200;
-        holding_item = 0;
+        //hunger = 500;
+        //thirst = 400;
+        hunger = 600;
+        thirst = 500;
+        
+		holding_item = 0;
         age = 0;
         atack = 1;
         defense = 1;
@@ -75,6 +88,8 @@ class ant
 		}
 		sleeping = false;
     }
+
+	void cancel_job();
 
 
     //algoritmo de actividades de mis hormigas
@@ -142,7 +157,7 @@ class game_data
 
     int dx[4];
     int dy[4];
-    bitset<13> tiles_map[48][36];
+    bitset<32> tiles_map[48][36];
     //map tiles
     //0 = nothing
     //1 = blocking

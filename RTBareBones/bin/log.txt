@@ -28,5 +28,30 @@ Loading texture interface/breed.rttex
 Loading texture interface/larva.rttex
 Loading texture interface/food_1.rttex
 Loading texture interface/water_1.rttex
+Touch start: X: 132.00 YL 825.00 (Finger 0)
+Touch mode: X: 135.00 YL 825.75 (Finger 0)
+Touch end: X: 135.00 YL 825.00 (Finger 0)
+Touch start: X: 802.00 YL 469.00 (Finger 0)
+Touch end: X: 802.00 YL 469.00 (Finger 0)
+Touch start: X: 831.00 YL 469.00 (Finger 0)
+Touch end: X: 831.00 YL 469.00 (Finger 0)
+Touch start: X: 848.00 YL 444.00 (Finger 0)
+Touch end: X: 848.00 YL 444.00 (Finger 0)
+Touch start: X: 114.00 YL 812.00 (Finger 0)
+Touch end: X: 114.00 YL 812.00 (Finger 0)
+Touch start: X: 847.00 YL 443.00 (Finger 0)
+Touch end: X: 847.00 YL 443.00 (Finger 0)
+Touch start: X: 896.00 YL 490.00 (Finger 0)
+Touch end: X: 896.00 YL 490.00 (Finger 0)
+Touch start: X: 203.00 YL 812.00 (Finger 0)
+Touch end: X: 203.00 YL 812.00 (Finger 0)
+Touch start: X: 852.00 YL 448.00 (Finger 0)
+Touch end: X: 852.00 YL 448.00 (Finger 0)
+Touch start: X: 905.00 YL 498.00 (Finger 0)
+Touch end: X: 905.00 YL 498.00 (Finger 0)
+Touch start: X: 905.00 YL 498.00 (Finger 0)
+Touch end: X: 905.00 YL 498.00 (Finger 0)
+Touch start: X: 550.00 YL 617.00 (Finger 0)
+Touch end: X: 550.00 YL 617.00 (Finger 0)
 Entered background
 Entering background
