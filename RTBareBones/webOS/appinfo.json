@@ -1,0 +1,10 @@
+{
+	"title": "RTBareBones",
+	"type": "pdk",
+	"main": "rtbarebones",
+	"id": "com.rtsoft.rtbarebones",
+	"version": "1.0.0",
+	"vendor": "Robinson Technologies",
+  "icon": "icon.png",
+  "requiredMemory": 20
+}
