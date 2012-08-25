@@ -240,7 +240,7 @@ void game_data::step()
 					{
 						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][WORKING_ON_ME] = 0;
 						//o mejor hacemos una nueva hormiga
-						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][HAS_ITEM] = 1;
+						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][HAS_ITEM] = 0;
 						//g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][ITEM_EGG] = 1;
 						ant baby(true);
 						baby.x = ants[i].next_job_x;
