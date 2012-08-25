@@ -19,6 +19,7 @@
 #include "Entity/CustomInputComponent.h" //used for the back button (android)
 #include "Entity/FocusInputComponent.h" //needed to let the input component see input messages
 #include "Entity/ArcadeInputComponent.h" 
+#include "include/game_data.h"
 //#include "util/TextScanner.h"
 
 MessageManager g_messageManager;
@@ -213,12 +214,16 @@ void AppInput(VariantList *pVList)
 	{
 	case MESSAGE_TYPE_GUI_CLICK_START:
 		LogMsg("Touch start: X: %.2f YL %.2f (Finger %d)", pt.x, pt.y, fingerID);
+		g_data.move_mouse(pt.x, pt.y);
 		break;
 	case MESSAGE_TYPE_GUI_CLICK_MOVE:
 		LogMsg("Touch mode: X: %.2f YL %.2f (Finger %d)", pt.x, pt.y, fingerID);
+		g_data.move_mouse(pt.x, pt.y);
 		break;
 	case MESSAGE_TYPE_GUI_CLICK_END:
 		LogMsg("Touch end: X: %.2f YL %.2f (Finger %d)", pt.x, pt.y, fingerID);
+		g_data.move_mouse(pt.x, pt.y);
+		g_data.click(pt.x, pt.y);
 		break;
 	}	
 }
@@ -267,7 +272,8 @@ void App::Update()
 		//send them to the log.  (Each device has a way to view a debug log in real-time)
 		GetBaseApp()->m_sig_input.connect(&AppInput);
 
-		SetupFakePrimaryScreenSize(1024, 768);
+		SetupFakePrimaryScreenSize(1152, 864);
+		GetBaseApp()->SetFPSLimit(30);
 
 		/*
 		//file handling test, if TextScanner.h is included at the top..
@@ -285,6 +291,9 @@ void App::Update()
 		b.LoadFile("temp.txt");
 		b.DumpToLog();
 		*/
+		g_data.init();
+		g_data.generate_map();
+
 	}
 
 	//game is thinking.  
@@ -299,51 +308,21 @@ void App::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	//draw our game stuff
-	DrawFilledRect(10,10,GetScreenSizeX()/3,GetScreenSizeY()/3, MAKE_RGBA(255,255,0,255));
-	DrawFilledRect(0,0,64,64, MAKE_RGBA(0,255,0,100));
+	//DrawFilledRect(10,10,GetScreenSizeX()/3,GetScreenSizeY()/3, MAKE_RGBA(255,255,0,255));
+	//DrawFilledRect(0,0,64,64, MAKE_RGBA(0,255,0,100));
 
 	//after our 2d rect call above, we need to prepare for raw GL again. (it keeps it in ortho mode if we don't for speed)
 	PrepareForGL();
-	RenderSpinningTriangle();
+	//RenderSpinningTriangle();
 	
-	//let's blit a bmp, but first load it if needed
-	if (!m_surf.IsLoaded())
-	{
-		m_surf.LoadFile("interface/test.bmp");
-	}
+	g_data.step();
+	g_data.render_map();
+	g_data.draw_menu();
 
-
-	m_surf.Bind();
-
-	//RenderTexturedGLTriangle();
-	//RenderTexturedGLTriangleWithDrawElements();
-
-	//blit the logo with the Y mirrored
-	//rtRect texRect = rtRect(0, m_surf.GetHeight(), m_surf.GetWidth(), 0);
-	//rtRect destRect = rtRect(0,0, m_surf.GetWidth(), m_surf.GetHeight());
-	//m_surf.BlitEx(destRect, texRect);
-
-	//make the logo spin like a wheel, whee!
-	//m_surf.BlitEx(destRect, texRect, MAKE_RGBA(255,255,255,255) , 180*SinGamePulseByMS(3000), CL_Vec2f(m_surf.GetWidth()/2,m_surf.GetHeight()/2));
-
-	//blit it normally
-	m_surf.Blit(0, 0);
-	float f_x = 32.0f/m_surf.GetWidth();
-	float f_y = 32.0f/m_surf.GetHeight();
-	m_surf.BlitScaled(16, 16, CL_Vec2f (f_x,f_y));
-
-	for (int x_pos = 0; x_pos < 32; x_pos++)
-	{
-		for (int y_pos = 0; y_pos < 24; y_pos++)
-		{
-			m_surf.BlitScaled( (x_pos*32)+16,(y_pos*32)+ 16, CL_Vec2f (f_x,f_y));
-		}
-	}
-	//m_surf.Blit(100, 100);
-
+	//g_data.mouse_x = -1;
+	//g_data.mouse_y = -1;
 	//GetFont(FONT_SMALL)->Draw(0,0, "test");
-	GetFont(FONT_SMALL)->DrawScaled(0,GetScreenSizeYf()-50, "white `2Green `3Cyan `4Red `5Purp ",1+SinGamePulseByMS(3000)*0.7);
-	
+
 	//the base handles actually drawing the GUI stuff over everything else, if applicable, which in this case it isn't.
 	BaseApp::Draw();
 }

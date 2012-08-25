@@ -331,7 +331,7 @@ public:
 	ResourceManager * GetResourceManager() {return &m_resourceManager;}
 
 	void ModMemUsed(int mod) {m_memUsed += mod;}
-	void ModTexUsed(int mod) {m_texMemUsed += mod;}
+	void ModTexUsed(int mod) {/*m_texMemUsed += mod;*/}
 
 	int GetMemUsed() {return m_memUsed;}
 	int GetTexMemUsed() {return m_texMemUsed;}

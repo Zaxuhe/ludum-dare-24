@@ -515,11 +515,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\source\src\a_star.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\a_star.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\App.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\source\App.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\game_data.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\game_data.h"
 				>
 			</File>
 			<File
