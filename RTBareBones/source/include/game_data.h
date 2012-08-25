@@ -25,10 +25,30 @@ extern const int m; // vertical size size of the map
 // 12:Drinking
 
 //player and enemies come from here
+
+typedef enum Type {
+BLOCK = 0,
+TREE_BASE = 1, 
+TREE_LEAF = 2,
+BREED = 3,
+FOOD = 4,
+DRINK = 5,
+FUNGI = 6,
+DIG = 7,
+WALL = 8,
+WORKING_ON_ME = 9, //if something is woring on it (example dig)
+//items
+HAS_ITEM = 10,
+ITEM_EGG = 11,
+
+//jobs
+PICK_EGG = 100,
+BE_A_BABY = 101 //its a job because you have to be a baby in order to grow :)
+};
 class ant
 {
     public:
-    ant()
+    ant(bool baby = false)
     {
         current_job = 0; //start as idle
         is_queen = false;
@@ -47,7 +67,13 @@ class ant
 		job_speed = 1;
 		job_time = 900;
 		has_egg = false;
+		if (baby)
+		{
+			job_time = 1800;
+			current_job = BE_A_BABY;
+		}
     }
+
 
     //algoritmo de actividades de mis hormigas
     //lista de trabajos
@@ -88,25 +114,7 @@ class ant
 	int speed_curr; //the time to the next walk
 
 };
-//jobs
-//PICK_EGG = 1
-//DIG = 7
 
-
-typedef enum Type {
-BLOCK = 0,
-TREE_BASE = 1, 
-TREE_LEAF = 2,
-BREED = 3,
-FOOD = 4,
-DRINK = 5,
-FUNGI = 6,
-DIG = 7,
-WALL = 8,
-WORKING_ON_ME = 9, //if something is woring on it (example dig)
-//jobs
-PICK_EGG = 100
-};
 
 class point2
 {
@@ -131,7 +139,7 @@ class game_data
 
     int dx[4];
     int dy[4];
-    bitset<10> tiles_map[48][36];
+    bitset<12> tiles_map[48][36];
     //map tiles
     //0 = nothing
     //1 = blocking
@@ -177,6 +185,7 @@ class game_data
 	Surface m_leaf; //for testing
 	Surface m_queen; //for testing
 	Surface m_hover; //for testing
+	Surface m_breed; //for testing
 	Surface m_egg; //for testing
 
 	Surface m_btn_dig; //for testing

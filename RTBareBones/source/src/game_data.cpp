@@ -140,6 +140,14 @@ void game_data::render_map()
 			 {
 				m_hover.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
 			 }
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(BREED) == true) //Breed
+			 {
+				m_breed.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
+			 }
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_EGG) == true) //Breed
+			 {
+				m_egg.Blit( (x_pos*24),(y_pos*24));
+			 }
 			 
 		}
 	}
@@ -156,7 +164,14 @@ void game_data::render_map()
 		}
 		else
 		{
-			m_ant.BlitScaled( (ants[i].x*24)+12,(ants[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+			if (ants[i].current_job == BE_A_BABY)
+			{
+				m_egg.Blit( (ants[i].x*24),(ants[i].y*24));
+			}
+			else
+			{
+				m_ant.BlitScaled( (ants[i].x*24)+12,(ants[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+			}
 			if (ants[i].holding_item == 1)
 			{
 				m_egg.Blit( (ants[i].x*24),(ants[i].y*24));
@@ -172,6 +187,10 @@ void game_data::render_map()
 //one step on the game
 void game_data::step()
 {
+	if (paused)
+	{
+		return;
+	}
 	//we make the ants walk
 	for (int i = 0; i < ants.size(); i++)
 	{
@@ -199,6 +218,43 @@ void game_data::step()
 						ants[i].job_time--;
 					}
 
+				}
+				else if (ants[i].current_job == BE_A_BABY)
+				{
+					if (ants[i].job_time == 0)
+					{
+						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
+						//o mejor hacemos una nueva hormiga
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 1;
+						//g_data.tiles_map[ants[i].x][ants[i].y][ITEM] = 1;
+						ants[i].current_job = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == BREED)
+				{
+					if (ants[i].job_time == 0)
+					{
+						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][WORKING_ON_ME] = 0;
+						//o mejor hacemos una nueva hormiga
+						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][HAS_ITEM] = 1;
+						//g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][ITEM_EGG] = 1;
+						ant baby(true);
+						baby.x = ants[i].next_job_x;
+						baby.y = ants[i].next_job_y;
+						ants.push_back(baby);
+						ants[i].holding_item = 0;
+						ants[i].current_job = 0;
+						ants[i].next_job_x = 0;
+						ants[i].next_job_y = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
 				}
 				else if (ants[i].current_job ==PICK_EGG)
 				{
@@ -294,19 +350,19 @@ void game_data::step()
 					for (int y_pos = 0; y_pos < 36; y_pos++)
 					{
 						//Breed zone
-						if (ants[i].holding_item == 1 && g_data.tiles_map[x_pos][y_pos][BREED] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
+						if (ants[i].holding_item == 1 && g_data.tiles_map[x_pos][y_pos][HAS_ITEM] == 0 && g_data.tiles_map[x_pos][y_pos][BREED] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
 						{
 							//tratamos de mover a la hormiga a esa posicion para dejar el item
 							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
 							if (mov.length() < best_mov.length() && mov.length() > 0)
 							{
 								best_mov = mov;
-								ants[i].current_job = DIG;
+								ants[i].current_job = BREED;
 								work_pos_x = x_pos;
 								work_pos_y = y_pos;
 								ants[i].next_job_x = x_pos;
 								ants[i].next_job_y = y_pos;
-								ants[i].job_time = 75*ants[i].job_speed;
+								ants[i].job_time = 30*ants[i].job_speed;
 							}
 						}
 						else if (g_data.tiles_map[x_pos][y_pos][DIG] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
@@ -507,6 +563,60 @@ void game_data::draw_menu()
 		}
 		return;
 	}
+	else if (draw_menu_ == 2)//breed zone
+	{
+		m_btn_dig.Blit(150, 787); //only draw the dig menu
+
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			m_breed.Blit(f_x * 24, f_y * 24,MAKE_RGBA(255,255,255,255*0.5));
+		}
+		//we make the rest
+		if (selecting_first == true) //ya pusimos uno
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			//m_hover.Blit(selection_1.x * 24, selection_1.y * 24);
+			//because we have 2, we can draw the square
+			int from_x;
+			int from_y;
+			int to_x;
+			int to_y;
+			if (selection_1.x > f_x)
+			{
+				from_x = f_x;
+				to_x = selection_1.x;
+			}
+			else
+			{
+				from_x = selection_1.x;
+				to_x = f_x;
+			}
+			if (selection_1.y > f_y)
+			{
+				from_y = f_y;
+				to_y = selection_1.y;
+			}
+			else
+			{
+				to_y = f_y;
+				from_y = selection_1.y;
+			}
+
+			for (int i = from_x; i < to_x+1; i++)
+			{
+				for (int z = from_y; z < to_y+1; z++)
+				{
+					m_breed.Blit(i * 24, z * 24,MAKE_RGBA(255,255,255,255*0.5));
+				}
+			}
+			
+		}
+		return;
+	}
 	m_btn_dig.Blit(10, 787);
 	m_btn_dig.Blit(80, 787);
 	m_btn_dig.Blit(150, 787);
@@ -514,6 +624,8 @@ void game_data::draw_menu()
 	m_btn_dig.Blit(290, 787);
 	m_btn_dig.Blit(360, 787);
 	m_btn_dig.Blit(430, 787);
+	m_btn_dig.Blit(500, 787);
+	m_btn_dig.Blit(570, 787);
 }
 
 void game_data::move_mouse(float x, float y)
@@ -537,7 +649,7 @@ void game_data::click(float x, float y)
 	}
 	else if (x > 80 && x < 80+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 1)) //click dig
 	{
-		LogMsg("Disable DIG");
+		//LogMsg("Disable DIG");
 		if (draw_menu_ != 1)
 		{
 			draw_menu_ = 1;
@@ -546,13 +658,13 @@ void game_data::click(float x, float y)
 		}
 		else //we disable diging
 		{
-			LogMsg("Disable DIG");
+			//LogMsg("Disable DIG");
 			paused = false;
 			draw_menu_ = 0;
 			selecting_first = false;
 		}
 	}
-	else if (x > 150 && x < 150+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 2)) //click zones
+	else if (x > 150 && x < 150+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 2)) //breed zones
 	{
 		if (draw_menu_ != 2)
 		{
@@ -627,6 +739,63 @@ void game_data::click(float x, float y)
 			}
 		}
 	}
+	else if (draw_menu_ == 2) //Breed zone
+	{
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);
+			if (selecting_first == false)
+			{
+				selecting_first = true;
+				selection_1 = point2(f_x,f_y);
+			}
+			else//we are seleting the second one
+			{
+				selection_2 = point2(f_x,f_y);
+				draw_menu_ = 0;
+				paused = false;
+				//now we make add all the tiles to dig
+				int from_x;
+				int from_y;
+				int to_x;
+				int to_y;
+				if (selection_1.x > f_x)
+				{
+					from_x = f_x;
+					to_x = selection_1.x;
+				}
+				else
+				{
+					from_x = selection_1.x;
+					to_x = f_x;
+				}
+				if (selection_1.y > f_y)
+				{
+					from_y = f_y;
+					to_y = selection_1.y;
+				}
+				else
+				{
+					to_y = f_y;
+					from_y = selection_1.y;
+				}
+
+				for (int i = from_x; i < to_x+1; i++)
+				{
+					for (int z = from_y; z < to_y+1; z++)
+					{
+						//if its not a wall it can be a breed zone
+						if (g_data.tiles_map[i][z][BLOCK] == 0)
+						{
+							g_data.tiles_map[i][z][BREED] = 1;
+						}		
+					}
+				}
+
+			}
+		}
+	}
 
 }
 
@@ -669,6 +838,10 @@ void game_data::init()
 	if (!m_hover.IsLoaded())
 	{
 		m_hover.LoadFile("interface/hover.rttex");
+	}
+	if (!m_breed.IsLoaded())
+	{
+		m_breed.LoadFile("interface/breed.rttex");
 	}
 	if (!m_egg.IsLoaded())
 	{

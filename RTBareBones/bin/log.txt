@@ -23,156 +23,56 @@ Loading texture interface/wood.rttex
 Loading texture interface/leaf.rttex
 Loading texture interface/btn.rttex
 Loading texture interface/hover.rttex
+Loading texture interface/breed.rttex
 Loading texture interface/larva.rttex
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 111.00 YL 830.00 (Finger 0)
-Touch end: X: 111.00 YL 830.00 (Finger 0)
-Disable DIG
-Touch start: X: 428.00 YL 581.00 (Finger 0)
-Touch mode: X: 442.13 YL 585.00 (Finger 0)
-Touch mode: X: 457.88 YL 588.38 (Finger 0)
-Touch mode: X: 478.13 YL 596.25 (Finger 0)
-Touch mode: X: 508.50 YL 606.38 (Finger 0)
-Touch mode: X: 514.13 YL 608.63 (Finger 0)
-Touch end: X: 514.00 YL 608.00 (Finger 0)
-Touch start: X: 318.00 YL 583.00 (Finger 0)
-Touch end: X: 318.00 YL 583.00 (Finger 0)
-Touch start: X: 111.00 YL 819.00 (Finger 0)
-Touch end: X: 111.00 YL 819.00 (Finger 0)
-Disable DIG
-Touch start: X: 411.00 YL 331.00 (Finger 0)
-Touch end: X: 411.00 YL 331.00 (Finger 0)
-Touch start: X: 519.00 YL 567.00 (Finger 0)
-Touch end: X: 519.00 YL 567.00 (Finger 0)
-Touch start: X: 126.00 YL 812.00 (Finger 0)
-Touch end: X: 126.00 YL 812.00 (Finger 0)
-Disable DIG
-Touch start: X: 541.00 YL 434.00 (Finger 0)
-Touch end: X: 541.00 YL 434.00 (Finger 0)
-Touch start: X: 662.00 YL 436.00 (Finger 0)
-Touch end: X: 662.00 YL 436.00 (Finger 0)
-Touch start: X: 121.00 YL 813.00 (Finger 0)
-Touch end: X: 121.00 YL 813.00 (Finger 0)
-Disable DIG
-Touch start: X: 655.00 YL 470.00 (Finger 0)
-Touch end: X: 655.00 YL 470.00 (Finger 0)
-Touch start: X: 646.00 YL 707.00 (Finger 0)
-Touch end: X: 646.00 YL 707.00 (Finger 0)
-Touch start: X: 136.00 YL 832.00 (Finger 0)
-Touch end: X: 136.00 YL 832.00 (Finger 0)
-Disable DIG
-Touch start: X: 616.00 YL 711.00 (Finger 0)
-Touch end: X: 616.00 YL 711.00 (Finger 0)
-Touch start: X: 288.00 YL 711.00 (Finger 0)
-Touch end: X: 288.00 YL 711.00 (Finger 0)
-Touch start: X: 114.00 YL 839.00 (Finger 0)
-Touch end: X: 114.00 YL 839.00 (Finger 0)
-Disable DIG
-Touch start: X: 301.00 YL 691.00 (Finger 0)
-Touch end: X: 301.00 YL 691.00 (Finger 0)
-Touch start: X: 304.00 YL 633.00 (Finger 0)
-Touch end: X: 304.00 YL 633.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 451.00 YL 608.00 (Finger 0)
-Touch mode: X: 451.13 YL 608.63 (Finger 0)
-Touch end: X: 451.00 YL 608.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 502.00 YL 495.00 (Finger 0)
-Touch end: X: 502.00 YL 495.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered background
-Unloading 1 ()
-Unloading 2 (interface/sand.rttex)
-Unloading 3 (interface/sand_digged.rttex)
-Unloading 4 (interface/sky.rttex)
-Unloading 5 (interface/ant.rttex)
-Unloading 6 (interface/queen.rttex)
-Unloading 7 (interface/wood.rttex)
-Unloading 8 (interface/leaf.rttex)
-Unloading 9 (interface/btn.rttex)
-Unloading 10 (interface/hover.rttex)
-Unloading 11 (interface/larva.rttex)
-Setting native video mode to 0, 0 - Fullscreen: 0  Aspect Ratio: 0.00
-Setting screen info to 0, 0, mode 1.  Original is 0, 0
-ERROR: OpenGL error 0x0504 (1284) in PrepareForGL file c:\users\zaxuhe\desktop\ld24\shared\util\glesutils.cpp:580
-
-Entered foreground
-Entering foreground
-Reloading font interface/font_trajan.rtfont
-Loading texture interface/sky.rttex
-Loading texture interface/sand_digged.rttex
-Loading texture interface/sand.rttex
-Loading texture interface/hover.rttex
-Loading texture interface/leaf.rttex
-Loading texture interface/wood.rttex
-Loading texture interface/queen.rttex
-Loading texture interface/larva.rttex
-Loading texture interface/ant.rttex
-Loading texture interface/btn.rttex
-App maximized
-Entered background
-Entering background
-Unloading 1 ()
-Unloading 4 (interface/sand.rttex)
-Unloading 3 (interface/sand_digged.rttex)
-Unloading 2 (interface/sky.rttex)
-Unloading 10 (interface/ant.rttex)
-Unloading 8 (interface/queen.rttex)
-Unloading 7 (interface/wood.rttex)
-Unloading 6 (interface/leaf.rttex)
-Unloading 11 (interface/btn.rttex)
-Unloading 5 (interface/hover.rttex)
-Unloading 9 (interface/larva.rttex)
-Setting native video mode to 1024, 768 - Fullscreen: 0  Aspect Ratio: 0.00
-Setting screen info to 1024, 768, mode 1.  Original is 1024, 768
-ERROR: OpenGL error 0x0504 (1284) in PrepareForGL file c:\users\zaxuhe\desktop\ld24\shared\util\glesutils.cpp:580
-
-Entered foreground
-Entering foreground
-Reloading font interface/font_trajan.rtfont
-Loading texture interface/sky.rttex
-Loading texture interface/sand_digged.rttex
-Loading texture interface/sand.rttex
-Loading texture interface/hover.rttex
-Loading texture interface/leaf.rttex
-Loading texture interface/wood.rttex
-Loading texture interface/queen.rttex
-Loading texture interface/larva.rttex
-Loading texture interface/ant.rttex
-Loading texture interface/btn.rttex
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
+Touch start: X: 192.00 YL 823.00 (Finger 0)
+Touch end: X: 192.00 YL 823.00 (Finger 0)
+Touch start: X: 682.00 YL 522.00 (Finger 0)
+Touch end: X: 682.00 YL 522.00 (Finger 0)
+Touch start: X: 689.00 YL 516.00 (Finger 0)
+Touch end: X: 689.00 YL 516.00 (Finger 0)
+Touch start: X: 129.00 YL 832.00 (Finger 0)
+Touch end: X: 129.00 YL 832.00 (Finger 0)
+Touch start: X: 707.00 YL 522.00 (Finger 0)
+Touch end: X: 707.00 YL 522.00 (Finger 0)
+Touch start: X: 869.00 YL 693.00 (Finger 0)
+Touch end: X: 869.00 YL 693.00 (Finger 0)
+Touch start: X: 193.00 YL 830.00 (Finger 0)
+Touch end: X: 193.00 YL 830.00 (Finger 0)
+Touch start: X: 165.00 YL 828.00 (Finger 0)
+Touch end: X: 165.00 YL 828.00 (Finger 0)
+Touch start: X: 177.00 YL 813.00 (Finger 0)
+Touch end: X: 177.00 YL 813.00 (Finger 0)
+Touch start: X: 200.00 YL 806.00 (Finger 0)
+Touch end: X: 200.00 YL 806.00 (Finger 0)
+Touch start: X: 184.00 YL 826.00 (Finger 0)
+Touch mode: X: 185.63 YL 826.88 (Finger 0)
+Touch end: X: 185.00 YL 826.00 (Finger 0)
+Touch start: X: 708.00 YL 506.00 (Finger 0)
+Touch end: X: 708.00 YL 506.00 (Finger 0)
+Touch start: X: 873.00 YL 685.00 (Finger 0)
+Touch end: X: 873.00 YL 685.00 (Finger 0)
+Touch start: X: 810.00 YL 546.00 (Finger 0)
+Touch end: X: 810.00 YL 546.00 (Finger 0)
+Touch start: X: 180.00 YL 828.00 (Finger 0)
+Touch end: X: 180.00 YL 828.00 (Finger 0)
+Touch start: X: 712.00 YL 524.00 (Finger 0)
+Touch end: X: 712.00 YL 524.00 (Finger 0)
+Touch start: X: 874.00 YL 678.00 (Finger 0)
+Touch end: X: 874.00 YL 678.00 (Finger 0)
+Touch start: X: 123.00 YL 833.00 (Finger 0)
+Touch end: X: 123.00 YL 833.00 (Finger 0)
+Touch start: X: 220.00 YL 558.00 (Finger 0)
+Touch end: X: 220.00 YL 558.00 (Finger 0)
+Touch start: X: 687.00 YL 757.00 (Finger 0)
+Touch end: X: 687.00 YL 757.00 (Finger 0)
+Touch start: X: 140.00 YL 801.00 (Finger 0)
+Touch end: X: 140.00 YL 801.00 (Finger 0)
+Touch start: X: 129.00 YL 803.00 (Finger 0)
+Touch end: X: 129.00 YL 803.00 (Finger 0)
+Touch start: X: 186.00 YL 551.00 (Finger 0)
+Touch end: X: 186.00 YL 551.00 (Finger 0)
+Touch start: X: 686.00 YL 721.00 (Finger 0)
+Touch end: X: 686.00 YL 721.00 (Finger 0)
 Entered background
 Entering background
