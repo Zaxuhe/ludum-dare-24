@@ -39,7 +39,8 @@ WALL = 8,
 WORKING_ON_ME = 9, //if something is woring on it (example dig)
 //items
 HAS_ITEM = 10,
-ITEM_EGG = 11,
+ITEM_FOOD_1 = 11,
+ITEM_WATER_1 = 12,
 
 //jobs
 PICK_EGG = 100,
@@ -53,9 +54,9 @@ class ant
         current_job = 0; //start as idle
         is_queen = false;
         hp = 100;
-        sleepness = 100;
-        hunger = 100;
-        thirst = 100;
+        sleepness = 200;
+        hunger = 200;
+        thirst = 200;
         holding_item = 0;
         age = 0;
         atack = 1;
@@ -72,6 +73,7 @@ class ant
 			job_time = 1800;
 			current_job = BE_A_BABY;
 		}
+		sleeping = false;
     }
 
 
@@ -86,6 +88,7 @@ class ant
 
     int hp; //starting at 100, you die at zero
     int sleepness; //starting at 100, go to sleep at 20, sleep anyware at 0, wake up at 100
+	bool sleeping;
     int hunger; //100 is full, at 50 it goes for more food, at 0 you die
     int thirst; //100 is full, at 50 it goes for more food, at 0 you die
     int atack;
@@ -139,7 +142,7 @@ class game_data
 
     int dx[4];
     int dy[4];
-    bitset<12> tiles_map[48][36];
+    bitset<13> tiles_map[48][36];
     //map tiles
     //0 = nothing
     //1 = blocking
@@ -181,12 +184,15 @@ class game_data
 	Surface m_sand_digged; //for testing
 	Surface m_sky; //for testing
 	Surface m_ant; //for testing
+	Surface m_ant_sleep; //for testing
 	Surface m_wood; //for testing
 	Surface m_leaf; //for testing
 	Surface m_queen; //for testing
 	Surface m_hover; //for testing
 	Surface m_breed; //for testing
 	Surface m_egg; //for testing
+	Surface m_food_1; //for testing
+	Surface m_water_1; //for testing
 
 	Surface m_btn_dig; //for testing
 

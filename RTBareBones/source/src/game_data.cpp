@@ -83,20 +83,32 @@ void game_data::generate_map()
 	//now we add the ants
 	//on the vector [0] is always the queen
 	ant a;
-	a.x = x_pos;
-	a.y = y_pos;
+	a.x = 2;//x_pos;
+	a.y = 11;//y_pos;
 	a.is_queen = true;
+	a.path.pathFind(2,11,x_pos,y_pos);
 	ants.push_back(a);
 
 	ant a2;
-	a2.x = 47;
+	a2.x = 1;
 	a2.y = 11;
+	a2.path.pathFind(1,11,x_pos+1,y_pos);
 	ants.push_back(a2);
 
 	ant a3;
 	a3.x = 0;
 	a3.y = 11;
+	a3.path.pathFind(0,11,x_pos-1,y_pos);
 	ants.push_back(a3);
+
+	//we also add the food
+	g_data.tiles_map[x_pos+1][y_pos-1][ITEM_FOOD_1] = 1;
+	g_data.tiles_map[x_pos-1][y_pos-1][ITEM_FOOD_1] = 1;
+	g_data.tiles_map[x_pos][y_pos-1][ITEM_FOOD_1] = 1;
+	//the water
+	g_data.tiles_map[x_pos+1][y_pos+1][ITEM_WATER_1] = 1;
+	g_data.tiles_map[x_pos-1][y_pos+1][ITEM_WATER_1] = 1;
+	g_data.tiles_map[x_pos][y_pos+1][ITEM_WATER_1] = 1;
 
 }
 
@@ -144,9 +156,13 @@ void game_data::render_map()
 			 {
 				m_breed.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
 			 }
- 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_EGG) == true) //Breed
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_1) == true) //Breed
 			 {
-				m_egg.Blit( (x_pos*24),(y_pos*24));
+				m_food_1.Blit( (x_pos*24),(y_pos*24));
+			 }
+  			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_1) == true) //Breed
+			 {
+				m_water_1.Blit( (x_pos*24),(y_pos*24));
 			 }
 			 
 		}
@@ -170,7 +186,14 @@ void game_data::render_map()
 			}
 			else
 			{
-				m_ant.BlitScaled( (ants[i].x*24)+12,(ants[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+				if (ants[i].sleeping == true)
+				{
+					m_ant_sleep.BlitScaled( (ants[i].x*24)+12,(ants[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+				}
+				else
+				{
+					m_ant.BlitScaled( (ants[i].x*24)+12,(ants[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+				}
 			}
 			if (ants[i].holding_item == 1)
 			{
@@ -183,6 +206,7 @@ void game_data::render_map()
 
 
 }
+
 
 //one step on the game
 void game_data::step()
@@ -197,6 +221,24 @@ void game_data::step()
 		//its moving that means is going to do something
 	    if(ants[i].path.movement_.length()>0 || ants[i].current_job != 0)
 		{
+			//if its thirst or hunger, it will stop every action and will go to eat or drink
+			//if its sleeping it will sleep
+			if (ants[i].sleepness < 10 && ants[i].sleeping == false)
+			{
+				ants[i].sleeping = true;
+				continue;
+			}
+			else if (ants[i].sleeping == true)
+			{
+				ants[i].sleepness++;
+				if (ants[i].sleepness == 1500)
+				{
+					ants[i].sleepness = 200;
+					ants[i].sleeping = false;
+				}
+				continue;
+			}
+
 			if (ants[i].path.movement_.length() == 0 || ants[i].path.current_postion_>=ants[i].path.movement_.length())
 			{
 				ants[i].path.movement_ = "";
@@ -225,7 +267,7 @@ void game_data::step()
 					{
 						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
 						//o mejor hacemos una nueva hormiga
-						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 1;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 0;
 						//g_data.tiles_map[ants[i].x][ants[i].y][ITEM] = 1;
 						ants[i].current_job = 0;
 					}
@@ -240,7 +282,7 @@ void game_data::step()
 					{
 						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][WORKING_ON_ME] = 0;
 						//o mejor hacemos una nueva hormiga
-						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][HAS_ITEM] = 0;
+						g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][HAS_ITEM] = 1;
 						//g_data.tiles_map[ants[i].next_job_x][ants[i].next_job_y][ITEM_EGG] = 1;
 						ant baby(true);
 						baby.x = ants[i].next_job_x;
@@ -285,6 +327,15 @@ void game_data::step()
 					ants[i].y=ants[i].y+g_data.dy[j];
 					ants[i].path.current_postion_++;
 					ants[i].speed_curr = ants[i].speed;
+					ants[i].hunger--;
+					ants[i].thirst--;
+					ants[i].sleepness--;
+					if (ants[i].hunger == 0 || ants[i].thirst == 0)
+					{
+						ants.erase(ants.begin()+i);
+						i--;
+						continue;
+					}
 				}
 				else
 				{
@@ -819,6 +870,10 @@ void game_data::init()
 	{
 		m_ant.LoadFile("interface/ant.rttex");
 	}
+	if (!m_ant_sleep.IsLoaded())
+	{
+		m_ant_sleep.LoadFile("interface/ant_sleep.rttex");
+	}
 	if (!m_queen.IsLoaded())
 	{
 		m_queen.LoadFile("interface/queen.rttex");
@@ -847,6 +902,15 @@ void game_data::init()
 	{
 		m_egg.LoadFile("interface/larva.rttex");
 	}
+	if (!m_food_1.IsLoaded())
+	{
+		m_food_1.LoadFile("interface/food_1.rttex");
+	}
+	if (!m_water_1.IsLoaded())
+	{
+		m_water_1.LoadFile("interface/water_1.rttex");
+	}
+
 
 
 }
