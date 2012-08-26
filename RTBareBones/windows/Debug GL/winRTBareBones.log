@@ -1,0 +1,134 @@
+﻿Build started 26/08/2012 2:15:51 p.m..
+     1>Project "C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\windows\winRTBareBones.vcxproj" on node 2 (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\source /I..\..\shared /I..\..\shared\util\boost /I"..\..\shared\ClanLib-2.0\Sources" /I..\..\shared\win\include /I..\..\shared\win\ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D BOOST_ALL_NO_LIB /D _USE_32BIT_TIME_T /D C_GL_MODE /D _HAS_ITERATOR_DEBUGGING=0 /D _SECURE_SCL=0 /D _NO_DEBUG_HEAP=1 /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"PlatformPrecomp.h" /Fp"Debug GL\winRTBareBones.pch" /Fo"Debug GL\\" /Fd"Debug GL\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\source\src\game_data.cpp
+         game_data.cpp
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\include\a_star.h(82): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(130): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(137): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(144): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(149): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(153): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(157): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(161): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(165): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(169): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(177): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(185): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(190): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(207): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(211): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(214): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(221): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(227): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(231): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(236): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(240): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(244): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(287): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(300): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(314): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(369): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(414): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(426): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(565): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(606): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(826): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(871): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(900): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(929): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(949): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(964): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(979): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(994): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1031): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1127): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1128): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1129): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1134): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1135): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1167): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1181): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1182): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1183): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1188): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1189): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1221): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1235): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1236): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1237): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1242): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1243): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1275): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1289): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1290): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1291): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1296): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1297): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1329): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1433): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1434): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1490): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1491): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1547): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1548): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1604): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\zaxuhe\desktop\ld24\rtbarebones\source\src\game_data.cpp(1605): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\bin\winRTBareBones.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\shared\win\lib opengl32.lib zdll.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\bin\RTBareBones.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"..\bin\winRTBareBones.lib" /MACHINE:X86 /SAFESEH "Debug GL\a_star.obj"
+         "Debug GL\App.obj"
+         "Debug GL\game_data.obj"
+         "Debug GL\main.obj"
+         "Debug GL\BaseApp.obj"
+         "Debug GL\PlatformPrecomp.obj"
+         "Debug GL\PlatformSetup.obj"
+         "Debug GL\WinUtils.obj"
+         "Debug GL\CRandom.obj"
+         "Debug GL\GLESUtils.obj"
+         "Debug GL\MathUtils.obj"
+         "Debug GL\MiscUtils.obj"
+         "Debug GL\RenderUtils.obj"
+         "Debug GL\ResourceUtils.obj"
+         "Debug GL\TextScanner.obj"
+         "Debug GL\Variant.obj"
+         "Debug GL\connection.obj"
+         "Debug GL\named_slot_map.obj"
+         "Debug GL\signal_base.obj"
+         "Debug GL\slot.obj"
+         "Debug GL\trackable.obj"
+         "Debug GL\Console.obj"
+         "Debug GL\GameTimer.obj"
+         "Debug GL\MessageManager.obj"
+         "Debug GL\ResourceManager.obj"
+         "Debug GL\VariantDB.obj"
+         "Debug GL\RenderBatcher.obj"
+         "Debug GL\RTGLESExt.obj"
+         "Debug GL\SoftSurface.obj"
+         "Debug GL\Surface.obj"
+         "Debug GL\SurfaceAnim.obj"
+         "Debug GL\RTFont.obj"
+         "Debug GL\Component.obj"
+         "Debug GL\Entity.obj"
+         "Debug GL\ArcadeInputComponent.obj"
+         "Debug GL\CustomInputComponent.obj"
+         "Debug GL\FocusInputComponent.obj"
+         "Debug GL\FocusUpdateComponent.obj"
+         "Debug GL\angle.obj"
+         "Debug GL\mat3.obj"
+         "Debug GL\mat4.obj"
+         "Debug GL\rect.obj"
+         "Debug GL\vec2.obj"
+         "Debug GL\vec3.obj"
+         "Debug GL\vec4.obj"
+         "Debug GL\AudioManager.obj"
+         "Debug GL\rtPlane.obj"
+         "Debug GL\rtRect.obj"
+         "Debug GL\SDLMain.obj"
+         "Debug GL\WebOSUtils.obj"
+         "Debug GL\FileManager.obj"
+         "Debug GL\StreamingInstance.obj"
+         "Debug GL\StreamingInstanceFile.obj"
+         winRTBareBones.vcxproj -> C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\windows\..\bin\winRTBareBones.exe
+     1>Done Building Project "C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\windows\winRTBareBones.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.13

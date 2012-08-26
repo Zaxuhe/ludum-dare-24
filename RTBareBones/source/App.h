@@ -4,6 +4,10 @@
  *  For license info, check the license.txt file that should have come with this.
  *
  */
+//TODO: Add enemies
+//TODO: atack button
+//TODO: atack enemies (when they die convert to food), ants also die and convert into food
+//TODO: rain fades
 
 #pragma once
 

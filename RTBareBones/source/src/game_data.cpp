@@ -1,8 +1,6 @@
 #include "PlatformPrecomp.h"
 #include "../include/game_data.h"
 
-
-
 game_data g_data;
 
 void game_data::generate_map()
@@ -103,12 +101,18 @@ void game_data::generate_map()
 
 	//we also add the food
 	g_data.tiles_map[x_pos+1][y_pos-1][ITEM_FOOD_5] = 1;
+	g_data.tiles_map[x_pos+1][y_pos-1][HAS_ITEM] = 1;
 	g_data.tiles_map[x_pos-1][y_pos-1][ITEM_FOOD_5] = 1;
+	g_data.tiles_map[x_pos-1][y_pos-1][HAS_ITEM] = 1;
 	g_data.tiles_map[x_pos][y_pos-1][ITEM_FOOD_5] = 1;
+	g_data.tiles_map[x_pos][y_pos-1][HAS_ITEM] = 1;
 	//the water
 	g_data.tiles_map[x_pos+1][y_pos+1][ITEM_WATER_5] = 1;
+	g_data.tiles_map[x_pos+1][y_pos+1][HAS_ITEM] = 1;
 	g_data.tiles_map[x_pos-1][y_pos+1][ITEM_WATER_5] = 1;
+	g_data.tiles_map[x_pos-1][y_pos+1][HAS_ITEM] = 1;
 	g_data.tiles_map[x_pos][y_pos+1][ITEM_WATER_5] = 1;
+	g_data.tiles_map[x_pos][y_pos+1][HAS_ITEM] = 1;
 
 }
 
@@ -118,7 +122,7 @@ void game_data::render_map()
 
 	for (int x_pos = 0; x_pos < 48; x_pos++)
 	{
-		for (int y_pos = 0; y_pos < 36; y_pos++)
+		for (int y_pos =35; y_pos >= 0; y_pos--)
 		{
 			 //we always draw the sky
 	 		 if (y_pos < 12)
@@ -156,7 +160,15 @@ void game_data::render_map()
 			 {
 				m_breed.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
 			 }
- 			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_1) == true ||
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(FOOD) == true) //Breed
+			 {
+				m_food_zone.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
+			 }
+ 			 if(g_data.tiles_map[x_pos][y_pos].test(DRINK) == true) //Breed
+			 {
+				m_water_zone.Blit( (x_pos*24),(y_pos*24),MAKE_RGBA(255,255,255,255*0.5));
+			 }
+			 if(g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_1) == true ||
 				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_2) == true ||
 				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_3) == true || 
 				 g_data.tiles_map[x_pos][y_pos].test(ITEM_FOOD_4) == true ||
@@ -171,6 +183,22 @@ void game_data::render_map()
 				 g_data.tiles_map[x_pos][y_pos].test(ITEM_WATER_5) == true) //Breed
 			 {
 				m_water_1.Blit( (x_pos*24),(y_pos*24));
+			 }
+			 if (g_data.tiles_map[x_pos][y_pos].test(RAIN) == true)
+			 {
+
+				 m_water_1.Blit( (x_pos*24),(y_pos*24));
+				 if (y_pos != 11 && rain_time % 25)
+				 {
+					g_data.tiles_map[x_pos][y_pos][RAIN] = 0;
+					g_data.tiles_map[x_pos][y_pos+1][RAIN] = 1;
+				 }
+				 if (y_pos == 11)
+				 {
+					 //convert it to water
+					 g_data.tiles_map[x_pos][y_pos][RAIN] = 0;
+					 g_data.tiles_map[x_pos][y_pos][ITEM_WATER_5] = 1;
+				 }
 			 }
 			 
 		}
@@ -207,6 +235,14 @@ void game_data::render_map()
 			{
 				m_egg.Blit( (ants[i].x*24),(ants[i].y*24));
 			}
+			else if (ants[i].holding_item == 2 || ants[i].holding_item == 3 || ants[i].holding_item == 4 || ants[i].holding_item == 5 || ants[i].holding_item == 6)
+			{
+				m_food_1.Blit( (ants[i].x*24),(ants[i].y*24));
+			}
+			else if (ants[i].holding_item == 7 || ants[i].holding_item == 8 || ants[i].holding_item == 9 || ants[i].holding_item == 10 || ants[i].holding_item == 11)
+			{
+				m_water_1.Blit( (ants[i].x*24),(ants[i].y*24));
+			}
 		}
 
 	}
@@ -220,6 +256,11 @@ void ant::cancel_job()
 	if (current_job == DIG || current_job == BREED || current_job == PICK_EGG)
 	{
 		g_data.tiles_map[next_job_x][next_job_y][WORKING_ON_ME] = 0;
+
+	}
+	else if (current_job == PICK_FOOD || current_job == PICK_DRINK)
+	{
+		g_data.tiles_map[next_job_x2][next_job_y2][WORKING_ON_ME] = 0;
 	}
 	current_job = 0;
 	
@@ -232,6 +273,43 @@ void game_data::step()
 	{
 		return;
 	}
+	//Rain calculation
+	if (rain_time == 0)
+	{
+		//we start to rain, 4 to 12 drops
+		int rain_drops = rand()%(16-4) + 4;
+		std::vector<int> drops;
+		
+		while (rain_drops > 0)
+		{
+			int next_drop =rand()%45 + 1; // 1 to 46
+			bool found_drop = false;
+			for (int i = 0;i < drops.size(); i++)
+			{
+				if (drops[i] == next_drop)
+				{
+					found_drop = true;
+				}
+			}
+			if (found_drop == false)
+			{
+				drops.push_back(next_drop);
+				rain_drops--;
+			}
+		}
+		for (int i = 0;i < drops.size(); i++)
+		{
+			g_data.tiles_map[drops[i]][0][RAIN] = 1;
+		}
+
+		rain_time = 6000;
+
+	}
+	else
+	{
+		rain_time--;
+	}
+
 	//we make the ants walk
 	for (int i = 0; i < ants.size(); i++)
 	{
@@ -256,7 +334,7 @@ void game_data::step()
 				continue;
 			}
 			//WEE NEED TO FEEd
-			if (ants[i].hunger < 100 && ants[i].current_job != SEARCH_FOOD && ants[i].current_job != SEARCH_DRINK)
+			if (ants[i].hunger < 100 && ants[i].current_job != SEARCH_FOOD && ants[i].current_job != SEARCH_DRINK && ants[i].current_job != DROP_FOOD && ants[i].current_job != DROP_DRINK)
 			{
 				//I HAVE TO FIND SOMETHING TO EATTT
 				std::string best_mov;
@@ -267,7 +345,7 @@ void game_data::step()
 				std::string mov;
 				for (int x_pos = 0; x_pos < 48; x_pos++)
 				{
-					for (int y_pos = 0; y_pos < 36; y_pos++)
+					for (int y_pos = 12; y_pos < 36; y_pos++)
 					{
 						if (g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_1] == 1 ||
 							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_2] == 1 ||
@@ -300,7 +378,7 @@ void game_data::step()
 				}
 			}
 			//WEE NEED TO DRINK
-			if (ants[i].thirst < 100 && ants[i].current_job != SEARCH_DRINK && ants[i].current_job != SEARCH_FOOD)
+			if (ants[i].thirst < 100 && ants[i].current_job != SEARCH_DRINK && ants[i].current_job != SEARCH_FOOD && ants[i].current_job != DROP_FOOD && ants[i].current_job != DROP_DRINK)
 			{
 				//I HAVE TO FIND SOMETHING TO EATTT
 				std::string best_mov;
@@ -311,7 +389,7 @@ void game_data::step()
 				std::string mov;
 				for (int x_pos = 0; x_pos < 48; x_pos++)
 				{
-					for (int y_pos = 0; y_pos < 36; y_pos++)
+					for (int y_pos = 12; y_pos < 36; y_pos++)
 					{
 						if (g_data.tiles_map[x_pos][y_pos][ITEM_WATER_1] == 1 ||
 							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_2] == 1 ||
@@ -404,7 +482,7 @@ void game_data::step()
 						ants[i].job_time--;
 					}
 				}
-				else if (ants[i].current_job == SEARCH_FOOD) //TODO: optimize this if time
+				else if (ants[i].current_job == SEARCH_FOOD)
 				{
 					if (ants[i].job_time == 0)
 					{
@@ -439,8 +517,162 @@ void game_data::step()
 								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5] = 0;
 								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] = 1;
 							}
-							ants[i].hunger = 600; //max
+							ants[i].hunger = 400; //max
 						}
+						ants[i].current_job = 0;
+						ants[i].next_job_x = 0;
+						ants[i].next_job_y = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == PICK_DRINK)
+				{
+					if (ants[i].job_time == 0)
+					{
+						//there is no longer food
+						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
+						if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1])
+						{
+							ants[i].holding_item = 7;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2])
+						{
+							ants[i].holding_item = 8;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3])
+						{
+							ants[i].holding_item = 9;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4])
+						{
+							ants[i].holding_item = 10;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5])
+						{
+							ants[i].holding_item = 11;
+						}
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 0;
+						ants[i].path.pathFind(ants[i].x, ants[i].y, ants[i].next_job_x, ants[i].next_job_y);
+						ants[i].current_job = DROP_DRINK;
+						ants[i].job_time = 30 * ants[i].job_speed;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == PICK_FOOD)
+				{
+					if (ants[i].job_time == 0)
+					{
+						//there is no longer food
+						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
+						if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1])
+						{
+							ants[i].holding_item = 2;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2])
+						{
+							ants[i].holding_item = 3;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3])
+						{
+							ants[i].holding_item = 4;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4])
+						{
+							ants[i].holding_item = 5;
+						}
+						else if (g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5])
+						{
+							ants[i].holding_item = 6;
+						}
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 0;
+						ants[i].path.pathFind(ants[i].x, ants[i].y, ants[i].next_job_x, ants[i].next_job_y);
+						ants[i].current_job = DROP_FOOD;
+						ants[i].job_time = 30 * ants[i].job_speed;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == DROP_DRINK)
+				{
+					if (ants[i].job_time == 0)
+					{
+						if (ants[i].holding_item == 7)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_1] = 1;
+						}
+						else if (ants[i].holding_item == 8)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_2] = 1;
+						}
+						else if (ants[i].holding_item == 9)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_3] = 1;
+						}
+						else if (ants[i].holding_item == 10)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] = 1;
+						}
+						else if (ants[i].holding_item == 11)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5] = 1;
+						}
+						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 1;
+						ants[i].holding_item = 0;
+						ants[i].current_job = 0;
+						ants[i].next_job_x = 0;
+						ants[i].next_job_y = 0;
+					}
+					else
+					{
+						ants[i].job_time--;
+					}
+				}
+				else if (ants[i].current_job == DROP_FOOD)
+				{
+					if (ants[i].job_time == 0)
+					{
+						if (ants[i].holding_item == 2)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_1] = 1;
+						}
+						else if (ants[i].holding_item == 3)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_2] = 1;
+						}
+						else if (ants[i].holding_item == 4)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_3] = 1;
+						}
+						else if (ants[i].holding_item == 5)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_4] = 1;
+						}
+						else if (ants[i].holding_item == 6)
+						{
+							g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5] = 1;
+						}
+						g_data.tiles_map[ants[i].x][ants[i].y][WORKING_ON_ME] = 0;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 1;
+						ants[i].holding_item = 0;
 						ants[i].current_job = 0;
 						ants[i].next_job_x = 0;
 						ants[i].next_job_y = 0;
@@ -485,7 +717,7 @@ void game_data::step()
 								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_5] = 0;
 								g_data.tiles_map[ants[i].x][ants[i].y][ITEM_WATER_4] = 1;
 							}
-							ants[i].thirst =500; //max
+							ants[i].thirst =300; //max
 						}
 						ants[i].current_job = 0;
 						ants[i].next_job_x = 0;
@@ -594,9 +826,34 @@ void game_data::step()
 						ants[i].job_time = 30*ants[i].job_speed;
 					}
 				}
+				bool need_food = false;
+				bool need_water = false;
+				int need_food_x = -1;
+				int need_food_y = -1;
+				//for the food we need to make a pre loop
 				for (int x_pos = 0; x_pos < 48; x_pos++)
 				{
-					for (int y_pos = 0; y_pos < 36; y_pos++)
+					for (int y_pos = 12; y_pos < 36; y_pos++)
+					{
+						if (g_data.tiles_map[x_pos][y_pos][HAS_ITEM] == 0 && g_data.tiles_map[x_pos][y_pos][FOOD] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
+						{
+							//we search for food to fill the zone
+							need_food = true;
+							need_food_x = x_pos;
+							need_food_y = y_pos;
+						}
+						if (g_data.tiles_map[x_pos][y_pos][HAS_ITEM] == 0 && g_data.tiles_map[x_pos][y_pos][DRINK] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
+						{
+							//we search for food to fill the zone
+							need_water = true;
+							need_food_x = x_pos;
+							need_food_y = y_pos;
+						}
+					}
+				}
+				for (int x_pos = 0; x_pos < 48; x_pos++)
+				{
+					for (int y_pos = 12; y_pos < 36; y_pos++)
 					{
 						//Breed zone
 						if (ants[i].holding_item == 1 && g_data.tiles_map[x_pos][y_pos][HAS_ITEM] == 0 && g_data.tiles_map[x_pos][y_pos][BREED] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
@@ -614,6 +871,65 @@ void game_data::step()
 								ants[i].job_time = 30*ants[i].job_speed;
 							}
 						}
+						//Food on zone
+						if (need_food && ants[i].holding_item == 0 &&
+							g_data.tiles_map[x_pos][y_pos][FOOD] == 0 && (
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_5] == 1) &&
+							g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0
+							)//we have found untiled food!
+						{
+							
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								//g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] = 1;
+								//g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+								best_mov = mov;
+								ants[i].current_job = PICK_FOOD;
+								work_pos_x = x_pos;
+								work_pos_y = y_pos;
+								ants[i].next_job_x = need_food_x;
+								ants[i].next_job_y = need_food_y;
+								ants[i].next_job_x2 = x_pos;
+								ants[i].next_job_y2 = y_pos;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+						//Water on zone
+						if (need_water && ants[i].holding_item == 0 &&
+							g_data.tiles_map[x_pos][y_pos][DRINK] == 0 && (
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_5] == 1) &&
+							g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0
+							)//we have found untiled food!
+						{
+							
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								//g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] = 1;
+								//g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+								best_mov = mov;
+								ants[i].current_job = PICK_DRINK;
+								work_pos_x = x_pos;
+								work_pos_y = y_pos;
+								ants[i].next_job_x = need_food_x;
+								ants[i].next_job_y = need_food_y;
+								ants[i].next_job_x2 = x_pos;
+								ants[i].next_job_y2 = y_pos;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+						//Dig zone
 						else if (g_data.tiles_map[x_pos][y_pos][DIG] == 1 && g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0)
 						{
 							//if its a wall we can dig it
@@ -681,12 +997,84 @@ void game_data::step()
 						}
 					}
 				}
+				//outside actions
+				for (int x_pos = 0; x_pos < 48; x_pos++)
+				{
+					for (int y_pos = 0; y_pos < 12; y_pos++)
+					{
+						//Food outside
+						if (need_food && ants[i].holding_item == 0 &&
+							g_data.tiles_map[x_pos][y_pos][FOOD] == 0 && (
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_FOOD_5] == 1) &&
+							g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0
+							)//we have found untiled food!
+						{
+							
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								//g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] = 1;
+								//g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+								best_mov = mov;
+								ants[i].current_job = PICK_FOOD;
+								work_pos_x = x_pos;
+								work_pos_y = y_pos;
+								ants[i].next_job_x = need_food_x;
+								ants[i].next_job_y = need_food_y;
+								ants[i].next_job_x2 = x_pos;
+								ants[i].next_job_y2 = y_pos;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+						//Water outside
+						if (need_water && ants[i].holding_item == 0 &&
+							g_data.tiles_map[x_pos][y_pos][DRINK] == 0 && (
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_1] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_2] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_3] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_4] == 1 ||
+							g_data.tiles_map[x_pos][y_pos][ITEM_WATER_5] == 1) &&
+							g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] == 0
+							)//we have found untiled food!
+						{
+							
+							//vamos a la comida la agarramos
+							mov = ants[i].path.pathFind(ants[i].x, ants[i].y, x_pos, y_pos);
+							if (mov.length() < best_mov.length() && mov.length() > 0)
+							{
+								//g_data.tiles_map[x_pos][y_pos][WORKING_ON_ME] = 1;
+								//g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+								best_mov = mov;
+								ants[i].current_job = PICK_DRINK;
+								work_pos_x = x_pos;
+								work_pos_y = y_pos;
+								ants[i].next_job_x = need_food_x;
+								ants[i].next_job_y = need_food_y;
+								ants[i].next_job_x2 = x_pos;
+								ants[i].next_job_y2 = y_pos;
+								ants[i].job_time = 30*ants[i].job_speed;
+							}
+						}
+					}
+				}
 				//we set the best job
 				if (best_mov[0] != 'a')
 				{
 					ants[i].path.movement_ = best_mov;
 					g_data.tiles_map[work_pos_x][work_pos_y][WORKING_ON_ME] = 1;
-
+					if (ants[i].current_job == PICK_FOOD)
+					{
+						g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+					}
+					if (ants[i].current_job == PICK_DRINK)
+					{
+						g_data.tiles_map[need_food_x][need_food_y][WORKING_ON_ME] = 1;
+					}
 				}
 			}
 			if (ants[i].current_job == 0 && ants[i].path.movement_.length() == 0)
@@ -866,6 +1254,114 @@ void game_data::draw_menu()
 		}
 		return;
 	}
+	else if (draw_menu_ == 3)//breed zone
+	{
+		m_btn_dig.Blit(220, 787); //only draw the dig menu
+
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			m_food_zone.Blit(f_x * 24, f_y * 24,MAKE_RGBA(255,255,255,255*0.5));
+		}
+		//we make the rest
+		if (selecting_first == true) //ya pusimos uno
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			//m_hover.Blit(selection_1.x * 24, selection_1.y * 24);
+			//because we have 2, we can draw the square
+			int from_x;
+			int from_y;
+			int to_x;
+			int to_y;
+			if (selection_1.x > f_x)
+			{
+				from_x = f_x;
+				to_x = selection_1.x;
+			}
+			else
+			{
+				from_x = selection_1.x;
+				to_x = f_x;
+			}
+			if (selection_1.y > f_y)
+			{
+				from_y = f_y;
+				to_y = selection_1.y;
+			}
+			else
+			{
+				to_y = f_y;
+				from_y = selection_1.y;
+			}
+
+			for (int i = from_x; i < to_x+1; i++)
+			{
+				for (int z = from_y; z < to_y+1; z++)
+				{
+					m_food_zone.Blit(i * 24, z * 24,MAKE_RGBA(255,255,255,255*0.5));
+				}
+			}
+			
+		}
+		return;
+	}
+	else if (draw_menu_ == 4)//breed zone
+	{
+		m_btn_dig.Blit(290, 787); //only draw the dig menu
+
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			m_water_zone.Blit(f_x * 24, f_y * 24,MAKE_RGBA(255,255,255,255*0.5));
+		}
+		//we make the rest
+		if (selecting_first == true) //ya pusimos uno
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);	
+			//m_hover.Blit(selection_1.x * 24, selection_1.y * 24);
+			//because we have 2, we can draw the square
+			int from_x;
+			int from_y;
+			int to_x;
+			int to_y;
+			if (selection_1.x > f_x)
+			{
+				from_x = f_x;
+				to_x = selection_1.x;
+			}
+			else
+			{
+				from_x = selection_1.x;
+				to_x = f_x;
+			}
+			if (selection_1.y > f_y)
+			{
+				from_y = f_y;
+				to_y = selection_1.y;
+			}
+			else
+			{
+				to_y = f_y;
+				from_y = selection_1.y;
+			}
+
+			for (int i = from_x; i < to_x+1; i++)
+			{
+				for (int z = from_y; z < to_y+1; z++)
+				{
+					m_water_zone.Blit(i * 24, z * 24,MAKE_RGBA(255,255,255,255*0.5));
+				}
+			}
+			
+		}
+		return;
+	}
 	m_btn_dig.Blit(10, 787);
 	m_btn_dig.Blit(80, 787);
 	m_btn_dig.Blit(150, 787);
@@ -918,6 +1414,34 @@ void game_data::click(float x, float y)
 		if (draw_menu_ != 2)
 		{
 			draw_menu_ = 2;
+			paused = true;
+			selecting_first = false;
+		}
+		else //we disable diging
+		{
+			paused = false;
+			draw_menu_ = 0;
+		}
+	}
+	else if (x > 220 && x < 220+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 3)) //food zone
+	{
+		if (draw_menu_ != 3)
+		{
+			draw_menu_ = 3;
+			paused = true;
+			selecting_first = false;
+		}
+		else //we disable diging
+		{
+			paused = false;
+			draw_menu_ = 0;
+		}
+	}
+	else if (x > 290 && x < 290+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 3)) //water zone
+	{
+		if (draw_menu_ != 4)
+		{
+			draw_menu_ = 4;
 			paused = true;
 			selecting_first = false;
 		}
@@ -1045,6 +1569,120 @@ void game_data::click(float x, float y)
 			}
 		}
 	}
+	else if (draw_menu_ == 3) //Food zone
+	{
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);
+			if (selecting_first == false)
+			{
+				selecting_first = true;
+				selection_1 = point2(f_x,f_y);
+			}
+			else//we are seleting the second one
+			{
+				selection_2 = point2(f_x,f_y);
+				draw_menu_ = 0;
+				paused = false;
+				//now we make add all the tiles to dig
+				int from_x;
+				int from_y;
+				int to_x;
+				int to_y;
+				if (selection_1.x > f_x)
+				{
+					from_x = f_x;
+					to_x = selection_1.x;
+				}
+				else
+				{
+					from_x = selection_1.x;
+					to_x = f_x;
+				}
+				if (selection_1.y > f_y)
+				{
+					from_y = f_y;
+					to_y = selection_1.y;
+				}
+				else
+				{
+					to_y = f_y;
+					from_y = selection_1.y;
+				}
+
+				for (int i = from_x; i < to_x+1; i++)
+				{
+					for (int z = from_y; z < to_y+1; z++)
+					{
+						//if its not a wall it can be a breed zone
+						if (g_data.tiles_map[i][z][BLOCK] == 0)
+						{
+							g_data.tiles_map[i][z][FOOD] = 1;
+						}		
+					}
+				}
+
+			}
+		}
+	}
+	else if (draw_menu_ == 4) //Food zone
+	{
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);
+			if (selecting_first == false)
+			{
+				selecting_first = true;
+				selection_1 = point2(f_x,f_y);
+			}
+			else//we are seleting the second one
+			{
+				selection_2 = point2(f_x,f_y);
+				draw_menu_ = 0;
+				paused = false;
+				//now we make add all the tiles to dig
+				int from_x;
+				int from_y;
+				int to_x;
+				int to_y;
+				if (selection_1.x > f_x)
+				{
+					from_x = f_x;
+					to_x = selection_1.x;
+				}
+				else
+				{
+					from_x = selection_1.x;
+					to_x = f_x;
+				}
+				if (selection_1.y > f_y)
+				{
+					from_y = f_y;
+					to_y = selection_1.y;
+				}
+				else
+				{
+					to_y = f_y;
+					from_y = selection_1.y;
+				}
+
+				for (int i = from_x; i < to_x+1; i++)
+				{
+					for (int z = from_y; z < to_y+1; z++)
+					{
+						//if its not a wall it can be a breed zone
+						if (g_data.tiles_map[i][z][BLOCK] == 0)
+						{
+							g_data.tiles_map[i][z][DRINK] = 1;
+						}		
+					}
+				}
+
+			}
+		}
+	}
 
 }
 
@@ -1108,13 +1746,21 @@ void game_data::init()
 	{
 		m_water_1.LoadFile("interface/water_1.rttex");
 	}
-
+	if (!m_food_zone.IsLoaded())
+	{
+		m_food_zone.LoadFile("interface/food_zone.rttex");
+	}
+	if (!m_water_zone.IsLoaded())
+	{
+		m_water_zone.LoadFile("interface/w_zone.rttex");
+	}
 
 
 }
 
 game_data::game_data()
 {
+	rain_time = 6000;
     //int dx2[4]={1, 0, -1, 0};
     //int dy2[4]={0, 1, 0, -1};
     //we add all the ways you can move

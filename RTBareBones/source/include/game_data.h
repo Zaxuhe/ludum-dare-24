@@ -49,12 +49,19 @@ ITEM_WATER_2 = 17,
 ITEM_WATER_3 = 18,
 ITEM_WATER_4 = 19,
 ITEM_WATER_5 = 20,
+RAIN = 21,
 
 //jobs
 PICK_EGG = 100,
 BE_A_BABY = 101, //its a job because you have to be a baby in order to grow :)
 SEARCH_FOOD = 102,
-SEARCH_DRINK = 103
+SEARCH_DRINK = 103,
+PICK_FOOD = 104,
+PICK_DRINK = 105,
+DROP_FOOD = 106,
+DROP_DRINK = 107,
+WATER_OUTSIDE = 108,
+FOOD_OUTSIDE = 109
 };
 class ant
 {
@@ -67,8 +74,8 @@ class ant
         sleepness = 200;
         //hunger = 500;
         //thirst = 400;
-        hunger = 600;
-        thirst = 500;
+        hunger = 400;
+        thirst = 300;
         
 		holding_item = 0;
         age = 0;
@@ -117,10 +124,26 @@ class ant
     int y;
 	int next_job_x;
 	int next_job_y;
+	
+	//only used if needed
+	int next_job_x2;
+	int next_job_y2;
+
+	
 
     int holding_item; //0 not holding anything, else holding the id
 	//items
 	//item = 1 egg
+	//item = 2 food 1
+	//item = 3 food 2
+	//item = 4 food 3
+	//item = 5 food 4
+	//item = 6 food 5
+	//item = 7 water 1
+	//item = 8 water 2
+	//item = 9 water 3
+	//item = 10 water 4
+	//item = 11 water 5
     int age; //from 0 to 10, you are a baby(no jobs and no move), on 100 or 200 you die
 
     int current_job;
@@ -188,6 +211,7 @@ class game_data
 
 	bool paused;
 	int draw_menu_;
+	int rain_time;
 
 
 
@@ -208,6 +232,8 @@ class game_data
 	Surface m_egg; //for testing
 	Surface m_food_1; //for testing
 	Surface m_water_1; //for testing
+	Surface m_food_zone; //for testing
+	Surface m_water_zone;
 
 	Surface m_btn_dig; //for testing
 

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ArrayOfArrayOfString>
+    <ArrayOfString>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\App.cpp</string>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\App.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\include\a_star.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\src\a_star.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\include\game_data.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\Users\Zaxuhe\Desktop\ld24\RTBareBones\source\src\game_data.cpp</string>
+    </ArrayOfString>
+  </ArrayOfArrayOfString>
+</ArrayOfArrayOfArrayOfString>
