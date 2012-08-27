@@ -258,7 +258,8 @@ class game_data
 
 	void enemy_step();
 
-
+	int enemy_time;
+	int enemies_killed;
 
 
     std::vector<ant> ants;
@@ -283,6 +284,14 @@ class game_data
 	Surface m_water_zone;
 	Surface m_hp_loss;
 	Surface m_atack;
+
+	Surface menu_pause;
+	Surface menu_dig;
+	Surface menu_atack;
+	Surface menu_breed;
+	Surface menu_water;
+	Surface menu_food;
+	Surface menu_cancel;
 
 	Surface m_btn_dig; //for testing
 

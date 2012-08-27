@@ -4,9 +4,6 @@
  *  For license info, check the license.txt file that should have come with this.
  *
  */
-//TODO: add enemies that can atack anywere :o (every 10 enemies)
-//TODO: add enemies on time
-//TODO: enemies random movement
 //TODO: delete zone
 //TODO: add menu
 //TODO: add jobs window

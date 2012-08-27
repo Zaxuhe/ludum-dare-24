@@ -324,6 +324,7 @@ void game_data::enemy_step()
 			g_data.tiles_map[enemies_[i].x][enemies_[i].y][ITEM_FOOD_5] = 1;
 			g_data.tiles_map[enemies_[i].x][enemies_[i].y][HAS_ITEM] = 1;
 			enemies_.erase(enemies_.begin()+i);
+			enemies_killed++;
 			i--;
 			continue;
 		}
@@ -441,6 +442,24 @@ void game_data::enemy_step()
 		{
 			enemies_[i].path.movement_ = best_mov;
 		}
+
+		if (enemies_[i].path.movement_.length() == 0)
+		{
+			//we move on a random way
+			if (enemies_[i].type == 0) //on x axis
+			{
+				int move_way = rand()%(2);
+				if (move_way == 0 && enemies_[i].x > 0)
+				{
+					mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, enemies_[i].x-1, enemies_[i].y);
+				}
+				else if (move_way == 1 && enemies_[i].x < 46)
+				{
+					mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, enemies_[i].x+1, enemies_[i].y);
+				}
+			}
+			//the other dosent need rand because ti
+		}
 		//if no player found we move randomly
 	}
 }
@@ -453,10 +472,16 @@ void game_data::step()
 		return;
 	}
 	//Add enemy
-	if (rain_time %1000 == 0 && rain_time != 6000)
+	int time_to_add = (2000-enemies_killed*10);
+	if (time_to_add < 600)
+	{
+		time_to_add = 600;
+	}
+	if (enemy_time % time_to_add == 0 && enemy_time != 0)
 	{
 		add_enemy_floor();
 	}
+	enemy_time ++;
 	//Rain calculation
 	if (rain_time == 0)
 	{
@@ -1405,7 +1430,7 @@ void game_data::draw_menu()
 	//diggin
 	if (draw_menu_ == 1)
 	{
-		m_btn_dig.Blit(80, 787); //only draw the dig menu
+		menu_cancel.Blit(80, 787); //only draw the dig menu
 
 		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
 		{
@@ -1459,7 +1484,7 @@ void game_data::draw_menu()
 	}
 	else if (draw_menu_ == 2)//breed zone
 	{
-		m_btn_dig.Blit(150, 787); //only draw the dig menu
+		menu_cancel.Blit(150, 787); //only draw the dig menu
 
 		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
 		{
@@ -1513,7 +1538,7 @@ void game_data::draw_menu()
 	}
 	else if (draw_menu_ == 3)//breed zone
 	{
-		m_btn_dig.Blit(220, 787); //only draw the dig menu
+		menu_cancel.Blit(220, 787); //only draw the dig menu
 
 		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
 		{
@@ -1567,7 +1592,7 @@ void game_data::draw_menu()
 	}
 	else if (draw_menu_ == 4)//breed zone
 	{
-		m_btn_dig.Blit(290, 787); //only draw the dig menu
+		menu_cancel.Blit(290, 787); //only draw the dig menu
 
 		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
 		{
@@ -1621,18 +1646,15 @@ void game_data::draw_menu()
 	}
 	else if (draw_menu_ == 5)//breed zone
 	{
-		m_btn_dig.Blit(360, 787); //only draw the dig menu
+		menu_cancel.Blit(360, 787); //only draw the dig menu
 		return;
 	}
-	m_btn_dig.Blit(10, 787);
-	m_btn_dig.Blit(80, 787);
-	m_btn_dig.Blit(150, 787);
-	m_btn_dig.Blit(220, 787);
-	m_btn_dig.Blit(290, 787);
-	m_btn_dig.Blit(360, 787);
-	m_btn_dig.Blit(430, 787);
-	m_btn_dig.Blit(500, 787);
-	m_btn_dig.Blit(570, 787);
+	menu_pause.Blit(10, 787);
+	menu_dig.Blit(80, 787);
+	menu_breed.Blit(150, 787);
+	menu_food.Blit(220, 787);
+	menu_water.Blit(290, 787);
+	menu_atack.Blit(360, 787);
 }
 
 void game_data::move_mouse(float x, float y)
@@ -1645,6 +1667,15 @@ void game_data::add_enemy_floor()
 {
 	//we add an enemy on the right or left position
 	enemies e;
+	int time_to_add = (2000-enemies_killed*10);
+	if (time_to_add < 600)
+	{
+		time_to_add = 600;
+	}
+	if (enemy_time != 0 && enemy_time % (time_to_add * 10) == 0 && enemies_killed != 0)
+	{
+		e.type = 1;
+	}
 	enemies_.push_back(e);
 }
 
@@ -1731,10 +1762,28 @@ void game_data::click(float x, float y)
 		}
 		else //we disable diging
 		{
+			for (int i = 0; i < enemies_.size(); i++)
+			{
+				enemies_[i].is_under_atack = false;
+			}
 			paused = false;
 			draw_menu_ = 0;
 		}
 	}
+	/*else if (x > 430 && x < 430+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 6)) //water zone
+	{
+		if (draw_menu_ !=6)
+		{
+			draw_menu_ = 6;
+			paused = true;
+			selecting_first = false;
+		}
+		else //we disable diging
+		{
+			paused = false;
+			draw_menu_ = 6;
+		}
+	}*/
 
 	//diggin
 	//we have made a click so we can save the position
@@ -1967,6 +2016,63 @@ void game_data::click(float x, float y)
 			}
 		}
 	}
+	else if (draw_menu_ == 6) //Food zone
+	{
+		if (mouse_y<744 && mouse_y>12*24) //le dimos move en otra area que no es el menu
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);
+			if (selecting_first == false)
+			{
+				selecting_first = true;
+				selection_1 = point2(f_x,f_y);
+			}
+			else//we are seleting the second one
+			{
+				selection_2 = point2(f_x,f_y);
+				draw_menu_ = 0;
+				paused = false;
+				//now we make add all the tiles to dig
+				int from_x;
+				int from_y;
+				int to_x;
+				int to_y;
+				if (selection_1.x > f_x)
+				{
+					from_x = f_x;
+					to_x = selection_1.x;
+				}
+				else
+				{
+					from_x = selection_1.x;
+					to_x = f_x;
+				}
+				if (selection_1.y > f_y)
+				{
+					from_y = f_y;
+					to_y = selection_1.y;
+				}
+				else
+				{
+					to_y = f_y;
+					from_y = selection_1.y;
+				}
+
+				for (int i = from_x; i < to_x+1; i++)
+				{
+					for (int z = from_y; z < to_y+1; z++)
+					{
+						//if its not a wall it can be a breed zone
+							g_data.tiles_map[i][z][DRINK] = 0;
+							g_data.tiles_map[i][z][FOOD] = 0;
+							g_data.tiles_map[i][z][BREED] = 0;	
+							g_data.tiles_map[i][z][DIG] = 0;	
+					}
+				}
+
+			}
+		}
+	}
 	else if (draw_menu_ == 5) //Attack
 	{
 
@@ -2000,6 +2106,7 @@ void game_data::click(float x, float y)
 
 void game_data::init()
 {
+	enemies_killed = 0;
 	draw_menu_ = 0; //0 draws
 	paused = false;
 	if (!m_sand.IsLoaded())
@@ -2083,11 +2190,40 @@ void game_data::init()
 		m_atack.LoadFile("interface/atack.rttex");
 	}
 
+	if (!menu_pause.IsLoaded())
+	{
+		menu_pause.LoadFile("interface/m_pause.rttex");
+	}
+	if (!menu_dig.IsLoaded())
+	{
+		menu_dig.LoadFile("interface/m_dig.rttex");
+	}
+	if (!menu_atack.IsLoaded())
+	{
+		menu_atack.LoadFile("interface/m_attack.rttex");
+	}
+	if (!menu_breed.IsLoaded())
+	{
+		menu_breed.LoadFile("interface/m_breed.rttex");
+	}
+	if (!menu_water.IsLoaded())
+	{
+		menu_water.LoadFile("interface/m_water.rttex");
+	}
+	if (!menu_food.IsLoaded())
+	{
+		menu_food.LoadFile("interface/m_food.rttex");
+	}
+	if (!menu_cancel.IsLoaded())
+	{
+		menu_cancel.LoadFile("interface/m_cancel.rttex");
+	}
 
 }
 
 game_data::game_data()
 {
+	enemy_time = 0;
 	rain_time = 6000;
     //int dx2[4]={1, 0, -1, 0};
     //int dy2[4]={0, 1, 0, -1};
