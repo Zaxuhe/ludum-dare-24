@@ -392,6 +392,8 @@ void game_data::enemy_step()
 				{
 					enemies_[i].atack_speed_curr--;
 				}
+				enemies_[i].path.movement_ = "";
+				best_mov = "a";
 				break;
 			}
 			else if (enemies_[i].type == 0)//only on surface atack
@@ -411,7 +413,7 @@ void game_data::enemy_step()
 
 				}
 			}
-			else if (enemies_[i].type == 1)//only on surface atack
+			else if (enemies_[i].type == 1)//anyware
 			{
 				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x+1, ants[z].y);
 				if (mov.length() < best_mov.length() && mov.length() > 0)
@@ -419,6 +421,16 @@ void game_data::enemy_step()
 					best_mov = mov;
 				}
 				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x-1, ants[z].y);
+				if (mov.length() < best_mov.length() && mov.length() > 0)
+				{
+					best_mov = mov;
+				}
+				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x, ants[z].y+1);
+				if (mov.length() < best_mov.length() && mov.length() > 0)
+				{
+					best_mov = mov;
+				}
+				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x, ants[z].y-1);
 				if (mov.length() < best_mov.length() && mov.length() > 0)
 				{
 					best_mov = mov;

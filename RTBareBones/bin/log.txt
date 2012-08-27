@@ -36,36 +36,3 @@ Loading texture interface/loss_hp.rttex
 Loading texture interface/atack.rttex
 Entered background
 Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 448.00 YL 200.00 (Finger 0)
-Touch mode: X: 448.88 YL 200.25 (Finger 0)
-Touch end: X: 448.00 YL 200.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 447.00 YL 493.00 (Finger 0)
-Touch mode: X: 447.75 YL 493.88 (Finger 0)
-Touch end: X: 447.00 YL 493.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Touch start: X: 261.00 YL 333.00 (Finger 0)
-Touch mode: X: 261.00 YL 333.00 (Finger 0)
-Touch end: X: 261.00 YL 333.00 (Finger 0)
-Entered background
-Entering background
-Entered foreground
-Entering foreground
-Entered background
-Entering background
