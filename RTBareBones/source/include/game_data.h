@@ -50,6 +50,11 @@ ITEM_WATER_3 = 18,
 ITEM_WATER_4 = 19,
 ITEM_WATER_5 = 20,
 RAIN = 21,
+HP_LOSS_1 = 22,
+HP_LOSS_2 = 23,
+HP_LOSS_3 = 24,
+HP_LOSS_4 = 25,
+HP_LOSS_5 = 26,
 
 //jobs
 PICK_EGG = 100,
@@ -85,6 +90,8 @@ class ant
         y = 0;
         speed = 7;
 		speed_curr = 6;
+		satack = 5;
+		satack_curr = 5;
 		job_speed = 1;
 		job_time = 900;
 		has_egg = false;
@@ -98,7 +105,8 @@ class ant
 
 	void cancel_job();
 
-
+	int satack_curr;
+	int satack;
     //algoritmo de actividades de mis hormigas
     //lista de trabajos
     //busca entre los trabajos que puede hacer, algo que hacer
@@ -172,11 +180,46 @@ class point2
 	int y;
 };
 
+class enemies
+{
+	public:
+	enemies()
+	{
+		type = 1;
+		hp = 10;
+		atack = 4;
+		defense = 1;
+		x = 0;
+		y = 11;
+		speed = 7,
+		speed_curr = speed;
+		atack_speed = 5;
+		atack_speed_curr = atack_speed;
+		is_under_atack = false;
+	}
+	bool is_under_atack;
+	a_star path;
+	int hp;
+	int atack;
+	int defense;
+	int type;
+	int x;
+	int y;
+	int atack_speed;
+	int atack_speed_curr;
+	int speed;
+	int speed_curr;
+};
+
 class game_data
 {
     public:
 
     game_data();
+
+	void add_enemy_floor();
+
+	std::vector<enemies> enemies_;
 
     int dx[4];
     int dy[4];
@@ -213,6 +256,8 @@ class game_data
 	int draw_menu_;
 	int rain_time;
 
+	void enemy_step();
+
 
 
 
@@ -223,6 +268,8 @@ class game_data
 	Surface m_sand_digged; //for testing
 	Surface m_sky; //for testing
 	Surface m_ant; //for testing
+	Surface m_bug; //for testing
+	Surface m_bug2; //for testing
 	Surface m_ant_sleep; //for testing
 	Surface m_wood; //for testing
 	Surface m_leaf; //for testing
@@ -234,6 +281,8 @@ class game_data
 	Surface m_water_1; //for testing
 	Surface m_food_zone; //for testing
 	Surface m_water_zone;
+	Surface m_hp_loss;
+	Surface m_atack;
 
 	Surface m_btn_dig; //for testing
 

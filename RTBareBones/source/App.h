@@ -4,11 +4,17 @@
  *  For license info, check the license.txt file that should have come with this.
  *
  */
-//TODO: Add enemies
-//TODO: atack button
-//TODO: atack enemies (when they die convert to food), ants also die and convert into food
+//TODO: add enemies that can atack anywere :o (every 10 enemies)
+//TODO: add enemies on time
+//TODO: enemies random movement
+//TODO: delete zone
+//TODO: add menu
+//TODO: add jobs window
+//TODO: change color for enemy mutated
+//TODO: add enemies that lives on the trees
+//TODO: fix the fact that you can add much zones on 1 tiles
+//TODO: if ants are destoryed the get stronger, if enemies are destroyed they get stronger
 //TODO: rain fades
-
 #pragma once
 
 #include "BaseApp.h"

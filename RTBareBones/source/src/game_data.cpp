@@ -200,7 +200,56 @@ void game_data::render_map()
 					 g_data.tiles_map[x_pos][y_pos][ITEM_WATER_5] = 1;
 				 }
 			 }
+			 if(g_data.tiles_map[x_pos][y_pos].test(HP_LOSS_1) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(HP_LOSS_2) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(HP_LOSS_3) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(HP_LOSS_4) == true ||
+				 g_data.tiles_map[x_pos][y_pos].test(HP_LOSS_5) == true) //HP_LOSS
+			 {
+				 m_hp_loss.Blit( (x_pos*24),(y_pos*24));
+				 if (g_data.tiles_map[x_pos][y_pos][HP_LOSS_1] == 1)
+				 {
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_1] = 0;
+				 }
+				 else if (g_data.tiles_map[x_pos][y_pos][HP_LOSS_2] == 1)
+				 {
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_2] = 0;
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_1] = 1;
+				 }
+				 else if (g_data.tiles_map[x_pos][y_pos][HP_LOSS_3] == 1)
+				 {
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_3] = 0;
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_2] = 1;
+				 }
+				 else if (g_data.tiles_map[x_pos][y_pos][HP_LOSS_4] == 1)
+				 {
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_4] = 0;
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_3] = 1;
+				 }
+				 else if (g_data.tiles_map[x_pos][y_pos][HP_LOSS_5] == 1)
+				 {
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_5] = 0;
+					 g_data.tiles_map[x_pos][y_pos][HP_LOSS_4] = 1;
+				 }
+				 
+			 }
 			 
+		}
+	}
+
+	for (int i = 0; i < enemies_.size(); i++)
+	{
+		if (enemies_[i].type == 0)
+		{
+			m_bug.BlitScaled( (enemies_[i].x*24)+12,(enemies_[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+		}
+		if (enemies_[i].type == 1)
+		{
+			m_bug2.BlitScaled( (enemies_[i].x*24)+12,(enemies_[i].y*24)+ 12, CL_Vec2f (1.5,1.5));
+		}
+		if (enemies_[i].is_under_atack == true)
+		{
+			m_atack.Blit( (enemies_[i].x*24),(enemies_[i].y*24),MAKE_RGBA(255,255,255,255*0.5));
 		}
 	}
 
@@ -266,12 +315,135 @@ void ant::cancel_job()
 	
 }
 
+void game_data::enemy_step()
+{
+	for (int i = 0; i < enemies_.size(); i++)
+	{
+		if (enemies_[i].hp == 0)
+		{
+			g_data.tiles_map[enemies_[i].x][enemies_[i].y][ITEM_FOOD_5] = 1;
+			g_data.tiles_map[enemies_[i].x][enemies_[i].y][HAS_ITEM] = 1;
+			enemies_.erase(enemies_.begin()+i);
+			i--;
+			continue;
+		}
+
+		if (enemies_[i].path.movement_.length() == 0 || enemies_[i].path.current_postion_>=enemies_[i].path.movement_.length())
+		{
+			enemies_[i].path.movement_ = "";
+			enemies_[i].path.current_postion_ = 0;
+			//we have reached the position
+		}
+		else
+		{
+			if (enemies_[i].speed_curr == 0)
+			{
+				int j; char c;
+				c =enemies_[i].path.movement_.at(enemies_[i].path.current_postion_);
+				j=atoi(&c);
+				enemies_[i].x=enemies_[i].x+g_data.dx[j];
+				enemies_[i].y=enemies_[i].y+g_data.dy[j];
+				enemies_[i].path.current_postion_++;
+				enemies_[i].speed_curr = enemies_[i].speed;
+			}
+			else
+			{
+				enemies_[i].speed_curr--;
+			}
+
+		}
+
+		//we search for a ant player to atack
+		std::string mov;
+		std::string best_mov;
+		for (int u = 0; u < 100; u++)
+		{
+			best_mov += "a";
+		}
+		bool atacked = false;
+		for (int z = 0; z < ants.size(); z++)
+		{
+			if (atacked == true)
+			{
+				continue;
+			}
+			if ((ants[z].x == enemies_[i].x-1 && ants[z].y == enemies_[i].y) ||
+				(ants[z].x == enemies_[i].x+1  && ants[z].y == enemies_[i].y) ||
+				(ants[z].x == enemies_[i].y-1 && ants[z].x == enemies_[i].x) || 
+				(ants[z].x == enemies_[i].y+1 && ants[z].x == enemies_[i].x) ||
+				(ants[z].x == enemies_[i].x && ants[z].y == enemies_[i].y)
+				)
+			{
+				//we hit the ant
+				if (enemies_[i].atack_speed_curr <= 0)
+				{
+					g_data.tiles_map[ants[z].x][ants[z].y+1][HP_LOSS_5] = 1;
+					ants[z].hp-= enemies_[i].atack;
+					if (ants[z].hp == 0)
+					{
+						g_data.tiles_map[ants[z].x][ants[z].y][ITEM_FOOD_5] = 1;
+						g_data.tiles_map[ants[z].x][ants[z].y][HAS_ITEM] = 1;
+						ants.erase(ants.begin()+z);
+						z--;
+					}
+					enemies_[i].atack_speed_curr = enemies_[i].atack_speed;
+				}
+				else
+				{
+					enemies_[i].atack_speed_curr--;
+				}
+				break;
+			}
+			else if (enemies_[i].type == 0)//only on surface atack
+			{
+				if (ants[z].y == 11)
+				{
+					mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x+1, ants[z].y);
+					if (mov.length() < best_mov.length() && mov.length() > 0)
+					{
+						best_mov = mov;
+					}
+					mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x-1, ants[z].y);
+					if (mov.length() < best_mov.length() && mov.length() > 0)
+					{
+						best_mov = mov;
+					}
+
+				}
+			}
+			else if (enemies_[i].type == 1)//only on surface atack
+			{
+				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x+1, ants[z].y);
+				if (mov.length() < best_mov.length() && mov.length() > 0)
+				{
+					best_mov = mov;
+				}
+				mov = enemies_[i].path.pathFind(enemies_[i].x, enemies_[i].y, ants[z].x-1, ants[z].y);
+				if (mov.length() < best_mov.length() && mov.length() > 0)
+				{
+					best_mov = mov;
+				}
+			}
+		}
+		if (best_mov.length() > 0 && best_mov[0] != 'a')
+		{
+			enemies_[i].path.movement_ = best_mov;
+		}
+		//if no player found we move randomly
+	}
+}
+
 //one step on the game
 void game_data::step()
 {
 	if (paused)
 	{
 		return;
+	}
+	//Add enemy
+	if (rain_time %1000 == 0 && rain_time != 6000)
+	{
+		add_enemy_floor();
 	}
 	//Rain calculation
 	if (rain_time == 0)
@@ -310,12 +482,89 @@ void game_data::step()
 		rain_time--;
 	}
 
+	//we make the bugs walk
+	enemy_step();
+
+
 	//we make the ants walk
 	for (int i = 0; i < ants.size(); i++)
 	{
-		//its moving that means is going to do something
-	    if(ants[i].path.movement_.length()>0 || ants[i].current_job != 0)
+		//just for the atack
+		bool is_atacking = false;
+		if (ants[i].current_job == 0 && ants[i].is_queen == false)
 		{
+			//we look for something to atack
+			for (int z = 0; z < enemies_.size(); z++)
+			{
+				if (enemies_[z].is_under_atack)
+				{
+					//LogMsg("Aqui");
+					if ((ants[i].x == enemies_[z].x-1 && ants[i].y == enemies_[z].y) ||
+					(ants[i].x == enemies_[z].x+1  && ants[i].y == enemies_[z].y) ||
+					(ants[i].x == enemies_[z].y-1 && ants[i].x == enemies_[z].x) || 
+					(ants[i].x == enemies_[z].y+1 && ants[i].x == enemies_[z].x) ||
+					(ants[i].x == enemies_[z].x && ants[i].y == enemies_[z].y)
+					)
+					{
+						//LogMsg("HIT");
+						if (ants[i].satack_curr == 0)
+						{
+							enemies_[z].hp -= ants[i].atack;
+							ants[i].satack_curr = ants[i].satack;
+						}
+						else
+						{
+							ants[i].satack_curr --;
+						}
+						ants[i].path.movement_ = "";
+						is_atacking = true;
+						break;
+					}
+					is_atacking = true;
+					//we atack
+					std::string best_mov;
+					for (int u = 0; u < 10000; u++)
+					{
+						best_mov += "a";
+					}
+					std::string mov;
+					//vamos al huevo y lo agarramos
+					if (enemies_[z].x-1 > 0)
+					{
+						mov = ants[i].path.pathFind(ants[i].x, ants[i].y, enemies_[z].x-1, enemies_[z].y);
+						if (mov.length() < best_mov.length() && mov.length() > 0)
+						{
+							best_mov = mov;
+							ants[i].cancel_job();
+						}
+					}
+					mov = ants[i].path.pathFind(ants[i].x, ants[i].y, enemies_[z].x+1, enemies_[z].y);
+					if (mov.length() < best_mov.length() && mov.length() > 0)
+					{
+						best_mov = mov;
+						ants[i].cancel_job();
+					}
+					mov = ants[i].path.pathFind(ants[i].x, ants[i].y, enemies_[z].x, enemies_[z].y-1);
+					if (mov.length() < best_mov.length() && mov.length() > 0)
+					{
+						best_mov = mov;
+						ants[i].cancel_job();
+					}
+					mov = ants[i].path.pathFind(ants[i].x, ants[i].y, enemies_[z].x, enemies_[z].y+1);
+					if (mov.length() < best_mov.length() && mov.length() > 0)
+					{
+						best_mov = mov;
+						ants[i].cancel_job();
+					}
+					if (best_mov[0] != 'a')
+					{
+						ants[i].path.movement_ = best_mov;
+					}
+					ants[i].current_job = 0;
+					break;
+				}
+			}
+		}
 			//if its thirst or hunger, it will stop every action and will go to eat or drink
 			//if its sleeping it will sleep
 			if (ants[i].sleepness < 10 && ants[i].sleeping == false)
@@ -326,9 +575,14 @@ void game_data::step()
 			else if (ants[i].sleeping == true)
 			{
 				ants[i].sleepness++;
+				ants[i].hp++;
+				if (ants[i].hp > 100)
+				{
+					ants[i].hp = 0;
+				}
 				if (ants[i].sleepness == 1500)
 				{
-					ants[i].sleepness = 200;
+					ants[i].sleepness = 400;
 					ants[i].sleeping = false;
 				}
 				continue;
@@ -422,7 +676,9 @@ void game_data::step()
 					ants[i].path.movement_ = best_mov;
 				}
 			}
-
+		//its moving that means is going to do something
+	    if(ants[i].path.movement_.length()>0 || ants[i].current_job != 0)
+		{
 			if (ants[i].path.movement_.length() == 0 || ants[i].path.current_postion_>=ants[i].path.movement_.length())
 			{
 				ants[i].path.movement_ = "";
@@ -762,6 +1018,8 @@ void game_data::step()
 					ants[i].sleepness--;
 					if (ants[i].hunger == 0 || ants[i].thirst == 0)
 					{
+						g_data.tiles_map[ants[i].x][ants[i].y][ITEM_FOOD_5] = 1;
+						g_data.tiles_map[ants[i].x][ants[i].y][HAS_ITEM] = 1;
 						ants.erase(ants.begin()+i);
 						i--;
 						continue;
@@ -790,11 +1048,10 @@ void game_data::step()
 				ants[i].job_time--;
 			}
 		}
-		else if (ants[i].is_queen == false)//is idle
+		else if (ants[i].is_queen == false && is_atacking == false)//is idle
 		{
 			int mod_x = 0;
 			int mod_y = 0;
-			//look for a job
 			if (ants[i].current_job == 0)
 			{
 				
@@ -1128,18 +1385,6 @@ void game_data::step()
 			}
 
 		}
-		/*else
-		{
-			//we generate a path for them
-			if (ants[i].is_queen == false)
-			{
-				ants[i].path.pathFind(ants[i].x, ants[i].y, 0, 11);
-				if (ants[i].x == 0 && ants[i].y == 11)
-				{
-					ants[i].path.pathFind(ants[i].x, ants[i].y, 47, 11);
-				}
-			}
-		}*/
 	}
 }
 
@@ -1362,6 +1607,11 @@ void game_data::draw_menu()
 		}
 		return;
 	}
+	else if (draw_menu_ == 5)//breed zone
+	{
+		m_btn_dig.Blit(360, 787); //only draw the dig menu
+		return;
+	}
 	m_btn_dig.Blit(10, 787);
 	m_btn_dig.Blit(80, 787);
 	m_btn_dig.Blit(150, 787);
@@ -1378,6 +1628,14 @@ void game_data::move_mouse(float x, float y)
 	mouse_x = x;
 	mouse_y = y;
 }
+
+void game_data::add_enemy_floor()
+{
+	//we add an enemy on the right or left position
+	enemies e;
+	enemies_.push_back(e);
+}
+
 
 void game_data::click(float x, float y)
 {
@@ -1437,11 +1695,25 @@ void game_data::click(float x, float y)
 			draw_menu_ = 0;
 		}
 	}
-	else if (x > 290 && x < 290+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 3)) //water zone
+	else if (x > 290 && x < 290+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 4)) //water zone
 	{
 		if (draw_menu_ != 4)
 		{
 			draw_menu_ = 4;
+			paused = true;
+			selecting_first = false;
+		}
+		else //we disable diging
+		{
+			paused = false;
+			draw_menu_ = 0;
+		}
+	}
+	else if (x > 360 && x < 360+64 && y > 787 && y < 787+64 && (draw_menu_ == 0 || draw_menu_ == 5)) //water zone
+	{
+		if (draw_menu_ !=5)
+		{
+			draw_menu_ = 5;
 			paused = true;
 			selecting_first = false;
 		}
@@ -1683,7 +1955,35 @@ void game_data::click(float x, float y)
 			}
 		}
 	}
+	else if (draw_menu_ == 5) //Attack
+	{
 
+		if (mouse_y<744) //le dimos move en otra area que no es el menu
+		{
+			int f_x = floorf(mouse_x/24);
+			int f_y = floorf(mouse_y/24);
+			bool atacked = false;
+			for (int i = 0; i < enemies_.size(); i++)
+			{
+				//LogMsg("click: %d, %d", f_x, f_y);
+				//LogMsg("enemy: %d, %d", enemies_[i].x, enemies_[i].y);
+				if (f_x == enemies_[i].x && f_y == enemies_[i].y)
+				{
+					enemies_[i].is_under_atack = true;
+					atacked = true;
+				}
+				else
+				{
+					enemies_[i].is_under_atack = false;
+				}
+			}
+			if (atacked == true)
+			{
+				draw_menu_ = 0;
+				paused = false;
+			}
+		}
+	}
 }
 
 void game_data::init()
@@ -1753,6 +2053,22 @@ void game_data::init()
 	if (!m_water_zone.IsLoaded())
 	{
 		m_water_zone.LoadFile("interface/w_zone.rttex");
+	}
+	if (!m_bug.IsLoaded())
+	{
+		m_bug.LoadFile("interface/bug_1.rttex");
+	}
+	if (!m_bug2.IsLoaded())
+	{
+		m_bug2.LoadFile("interface/bug_2.rttex");
+	}
+	if (!m_hp_loss.IsLoaded())
+	{
+		m_hp_loss.LoadFile("interface/loss_hp.rttex");
+	}
+	if (!m_atack.IsLoaded())
+	{
+		m_atack.LoadFile("interface/atack.rttex");
 	}
 
 
