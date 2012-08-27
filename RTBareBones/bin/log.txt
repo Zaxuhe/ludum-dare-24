@@ -41,41 +41,150 @@ Loading texture interface/m_breed.rttex
 Loading texture interface/m_water.rttex
 Loading texture interface/m_food.rttex
 Loading texture interface/m_cancel.rttex
-Touch start: X: 446.00 YL 822.00 (Finger 0)
-Touch end: X: 446.00 YL 822.00 (Finger 0)
-Touch start: X: 535.00 YL 820.00 (Finger 0)
-Touch end: X: 535.00 YL 820.00 (Finger 0)
-Touch start: X: 401.00 YL 813.00 (Finger 0)
-Touch end: X: 401.00 YL 813.00 (Finger 0)
-Touch start: X: 392.00 YL 820.00 (Finger 0)
-Touch end: X: 392.00 YL 820.00 (Finger 0)
-Touch start: X: 327.00 YL 815.00 (Finger 0)
-Touch end: X: 327.00 YL 815.00 (Finger 0)
-Touch start: X: 805.00 YL 451.00 (Finger 0)
-Touch end: X: 805.00 YL 451.00 (Finger 0)
-Touch start: X: 804.00 YL 499.00 (Finger 0)
-Touch end: X: 804.00 YL 499.00 (Finger 0)
-Touch start: X: 249.00 YL 822.00 (Finger 0)
-Touch end: X: 249.00 YL 822.00 (Finger 0)
-Touch start: X: 799.00 YL 420.00 (Finger 0)
-Touch end: X: 799.00 YL 420.00 (Finger 0)
-Touch start: X: 799.00 YL 371.00 (Finger 0)
-Touch end: X: 799.00 YL 371.00 (Finger 0)
-Touch start: X: 178.00 YL 815.00 (Finger 0)
-Touch end: X: 178.00 YL 815.00 (Finger 0)
-Touch start: X: 807.00 YL 352.00 (Finger 0)
-Touch end: X: 807.00 YL 352.00 (Finger 0)
-Touch start: X: 804.00 YL 303.00 (Finger 0)
-Touch end: X: 804.00 YL 303.00 (Finger 0)
-Touch start: X: 108.00 YL 817.00 (Finger 0)
-Touch end: X: 108.00 YL 817.00 (Finger 0)
-Touch start: X: 786.00 YL 520.00 (Finger 0)
-Touch end: X: 786.00 YL 520.00 (Finger 0)
-Touch start: X: 787.00 YL 567.00 (Finger 0)
-Touch end: X: 787.00 YL 567.00 (Finger 0)
-Touch start: X: 36.00 YL 824.00 (Finger 0)
-Touch end: X: 36.00 YL 824.00 (Finger 0)
-Touch start: X: 36.00 YL 824.00 (Finger 0)
-Touch end: X: 36.00 YL 824.00 (Finger 0)
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Entered background
+Entering background
+Entered foreground
+Entering foreground
+Touch start: X: 66.00 YL 555.00 (Finger 0)
+Touch mode: X: 66.38 YL 555.75 (Finger 0)
+Touch end: X: 66.00 YL 555.00 (Finger 0)
+Entered background
+Entering background
+Entered background
+Unloading 1 ()
+Unloading 2 (interface/sand.rttex)
+Unloading 3 (interface/sand_digged.rttex)
+Unloading 4 (interface/sky.rttex)
+Unloading 5 (interface/ant.rttex)
+Unloading 6 (interface/ant_sleep.rttex)
+Unloading 7 (interface/queen.rttex)
+Unloading 8 (interface/wood.rttex)
+Unloading 9 (interface/leaf.rttex)
+Unloading 10 (interface/btn.rttex)
+Unloading 11 (interface/hover.rttex)
+Unloading 12 (interface/breed.rttex)
+Unloading 13 (interface/larva.rttex)
+Unloading 14 (interface/food_1.rttex)
+Unloading 15 (interface/water_1.rttex)
+Unloading 16 (interface/food_zone.rttex)
+Unloading 17 (interface/w_zone.rttex)
+Unloading 18 (interface/bug_1.rttex)
+Unloading 19 (interface/bug_2.rttex)
+Unloading 20 (interface/loss_hp.rttex)
+Unloading 21 (interface/atack.rttex)
+Unloading 22 (interface/m_pause.rttex)
+Unloading 23 (interface/m_dig.rttex)
+Unloading 24 (interface/m_attack.rttex)
+Unloading 25 (interface/m_breed.rttex)
+Unloading 26 (interface/m_water.rttex)
+Unloading 27 (interface/m_food.rttex)
+Unloading 28 (interface/m_cancel.rttex)
+Setting native video mode to 0, 0 - Fullscreen: 0  Aspect Ratio: 0.00
+Setting screen info to 0, 0, mode 1.  Original is 0, 0
+ERROR: OpenGL error 0x0504 (1284) in PrepareForGL file c:\users\zaxuhe\desktop\ld24\shared\util\glesutils.cpp:580
+
+Entered foreground
+Entering foreground
+Reloading font interface/font_trajan.rtfont
+Loading texture interface/sand_digged.rttex
+Loading texture interface/sky.rttex
+Loading texture interface/leaf.rttex
+Loading texture interface/wood.rttex
+Loading texture interface/sand.rttex
+Loading texture interface/water_1.rttex
+Loading texture interface/food_1.rttex
+Loading texture interface/queen.rttex
+Loading texture interface/ant.rttex
+Loading texture interface/m_pause.rttex
+Loading texture interface/m_dig.rttex
+Loading texture interface/m_breed.rttex
+Loading texture interface/m_food.rttex
+Loading texture interface/m_water.rttex
+Loading texture interface/m_attack.rttex
+Loading texture interface/larva.rttex
+Loading texture interface/ant_sleep.rttex
+Loading texture interface/bug_2.rttex
+Loading texture interface/loss_hp.rttex
+App maximized
+Entered background
+Entering background
+Unloading 1 ()
+Unloading 6 (interface/sand.rttex)
+Unloading 2 (interface/sand_digged.rttex)
+Unloading 3 (interface/sky.rttex)
+Unloading 10 (interface/ant.rttex)
+Unloading 18 (interface/ant_sleep.rttex)
+Unloading 9 (interface/queen.rttex)
+Unloading 5 (interface/wood.rttex)
+Unloading 4 (interface/leaf.rttex)
+Unloading 17 (interface/larva.rttex)
+Unloading 8 (interface/food_1.rttex)
+Unloading 7 (interface/water_1.rttex)
+Unloading 19 (interface/bug_2.rttex)
+Unloading 20 (interface/loss_hp.rttex)
+Unloading 11 (interface/m_pause.rttex)
+Unloading 12 (interface/m_dig.rttex)
+Unloading 16 (interface/m_attack.rttex)
+Unloading 13 (interface/m_breed.rttex)
+Unloading 15 (interface/m_water.rttex)
+Unloading 14 (interface/m_food.rttex)
+Setting native video mode to 1024, 768 - Fullscreen: 0  Aspect Ratio: 0.00
+Setting screen info to 1024, 768, mode 1.  Original is 1024, 768
+ERROR: OpenGL error 0x0504 (1284) in PrepareForGL file c:\users\zaxuhe\desktop\ld24\shared\util\glesutils.cpp:580
+
+Entered foreground
+Entering foreground
+Reloading font interface/font_trajan.rtfont
+Loading texture interface/sand_digged.rttex
+Loading texture interface/sky.rttex
+Loading texture interface/water_1.rttex
+Loading texture interface/leaf.rttex
+Loading texture interface/wood.rttex
+Loading texture interface/sand.rttex
+Loading texture interface/food_1.rttex
+Loading texture interface/loss_hp.rttex
+Loading texture interface/bug_2.rttex
+Loading texture interface/ant_sleep.rttex
+Loading texture interface/larva.rttex
+Loading texture interface/m_pause.rttex
+Loading texture interface/m_dig.rttex
+Loading texture interface/m_breed.rttex
+Loading texture interface/m_food.rttex
+Loading texture interface/m_water.rttex
+Loading texture interface/m_attack.rttex
+Touch start: X: 1058.00 YL 56.00 (Finger 0)
+Touch end: X: 1058.00 YL 56.00 (Finger 0)
 Entered background
 Entering background
